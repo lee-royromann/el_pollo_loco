@@ -7,6 +7,9 @@ class World {
         new Chicken(),
         new Chicken()
     ];
+    clouds = [
+        new Cloud()
+    ];
 
     constructor(canvas) {
         this.canvas = canvas;
@@ -16,6 +19,7 @@ class World {
 
     draw() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.addObjectsToMap(this.clouds);
         this.addObjectsToMap(this.enemies);
         this.addToMap(this.character);
 
