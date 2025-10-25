@@ -1,3 +1,8 @@
+let canvas;
+let world;
+
 function init() {
-    console.log("Game initialized");
+    canvas = document.getElementById("canvas");
+    world = new World(canvas);
+    ctx = canvas.getContext("2d");
 }
