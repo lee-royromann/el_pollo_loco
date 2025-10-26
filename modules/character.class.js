@@ -21,14 +21,24 @@ class Character extends MovableObject {
     }
 
     animate() {
-        setInterval(() => {
-            if (this.world.keyboard.RIGHT) {
-                let i = this.currentImage % this.IMAGES_WALKING.length;
-                let path = this.IMAGES_WALKING[i];
-                this.img = this.imageCache[path];
+        let frameCount = 0; // Counter for frames
+        const frameRate = 5; // Number of frames required for each image change
+        const animateFrame = () => {
+            frameCount++;
+            if (this.world.keyboard.RIGHT && frameCount % frameRate === 0) {
                 this.currentImage++;
+                if (this.currentImage >= this.IMAGES_WALKING.length) {
+                    this.currentImage = 0;
+                }
+                let path = this.IMAGES_WALKING[this.currentImage];
+                this.img = this.imageCache[path];
             }
-        }, 100);
+            if (frameCount >= 1000) {
+                frameCount = 0;
+            }
+            requestAnimationFrame(animateFrame); // Calls animateFrame again
+        };
+        requestAnimationFrame(animateFrame); // Starts the animation loop
     }
 
     jump() {
