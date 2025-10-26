@@ -1,6 +1,4 @@
 class World {
-    canvas;
-    ctx;
     character = new Character();
     enemies = [
         new Chicken(),
@@ -11,12 +9,11 @@ class World {
         new Cloud()
     ];
     backgroundObjects = [
-        new BackgroundObject("/img/5_background/layers/air.png"),
-        new BackgroundObject("/img/5_background/layers/3_third_layer/1.png"),
-        new BackgroundObject("/img/5_background/layers/2_second_layer/1.png"),
-        new BackgroundObject("/img/5_background/layers/1_first_layer/1.png")
+        new BackgroundObject("./img/5_background/layers/air.png"),
+        new BackgroundObject("./img/5_background/layers/3_third_layer/1.png"),
+        new BackgroundObject("./img/5_background/layers/2_second_layer/1.png"),
+        new BackgroundObject("./img/5_background/layers/1_first_layer/1.png")
     ];
-    keyboard;
 
     constructor(canvas, keyboard) {
         this.canvas = canvas;
@@ -51,6 +48,12 @@ class World {
     }
 
     addToMap(movableObject) {
-        this.ctx.drawImage(movableObject.img, movableObject.x, movableObject.y, movableObject.width, movableObject.height);
+        this.ctx.drawImage(
+            movableObject.img,
+            movableObject.x,
+            movableObject.y,
+            movableObject.width,
+            movableObject.height
+        );
     }
 }

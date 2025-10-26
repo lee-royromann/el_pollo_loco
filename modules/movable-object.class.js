@@ -1,7 +1,7 @@
 class MovableObject {
+    img;
     x = 120;
     y = 250;
-    img;
     height = 200;
     width = 100;
     imageCache = [];
@@ -13,10 +13,6 @@ class MovableObject {
         this.img.src = imgPath; 
     }
 
-    /**
-     * 
-     * @param {*} array 
-     */
     loadImages(array) {
         array.forEach((path) => {
             let img = new Image();
