@@ -17,28 +17,34 @@ class Character extends MovableObject {
         this.height = 320;
         this.width = 160;
         this.world;
+        this.speed = 5; // Bewegungsgeschwindigkeit nach rechts
         this.animate();
     }
 
     animate() {
-        let frameCount = 0; // Counter for frames
-        const frameRate = 5; // Number of frames required for each image change
-        const animateFrame = () => {
-            frameCount++;
-            if (this.world.keyboard.RIGHT && frameCount % frameRate === 0) {
-                this.currentImage++;
-                if (this.currentImage >= this.IMAGES_WALKING.length) {
-                    this.currentImage = 0;
-                }
-                let path = this.IMAGES_WALKING[this.currentImage];
+
+        setInterval(() => {
+            if (this.world.keyboard.RIGHT) {
+                this.otherDirection = false;
+                this.x += this.speed;
+            }
+        }, 1000/60);
+
+        setInterval(() => {
+            if (this.world.keyboard.LEFT) {
+                this.otherDirection = true;
+                this.x -= this.speed;
+            }
+        }, 1000/60);
+
+        setInterval(() => {
+            if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
+                let i = this.currentImage % this.IMAGES_WALKING.length;
+                let path = this.IMAGES_WALKING[i];
                 this.img = this.imageCache[path];
+                this.currentImage++;
             }
-            if (frameCount >= 1000) {
-                frameCount = 0;
-            }
-            requestAnimationFrame(animateFrame); // Calls animateFrame again
-        };
-        requestAnimationFrame(animateFrame); // Starts the animation loop
+        }, 50);
     }
 
     jump() {
