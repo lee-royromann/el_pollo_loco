@@ -10,10 +10,21 @@ class World {
         this.keyboard = keyboard;
         this.draw();
         this.setWorld();
+        this.checkCollisions();
     }
 
     setWorld() {
         this.character.world = this;
+    }
+
+    checkCollisions() {
+        setInterval(() => {
+            this.level.enemies.forEach(enemy => {
+                if (this.character.isColliding(enemy)) {
+                    console.log('Collision with enemy detected!', enemy);
+                }
+            });
+        }, 100);
     }
 
     getVisibleBackgrounds() {
@@ -67,21 +78,24 @@ class World {
 
     addToMap(movableObject) {
         if (movableObject.otherDirection) {
-            this.ctx.save();
-            this.ctx.translate(movableObject.width, 0);
-            this.ctx.scale(-1, 1);
-            movableObject.x = movableObject.x * -1;
+            this.flipImage(movableObject);
         }
-        this.ctx.drawImage(
-            movableObject.img,
-            movableObject.x,
-            movableObject.y,
-            movableObject.width,
-            movableObject.height
-        );
+        movableObject.draw(this.ctx);
+        movableObject.drawFrame(this.ctx);
         if (movableObject.otherDirection) {
-            movableObject.x = movableObject.x * -1;
-            this.ctx.restore();
+            this.flipImageBack(movableObject);
         }
+    }
+
+    flipImage(movableObject) {
+        this.ctx.save();
+        this.ctx.translate(movableObject.width, 0);
+        this.ctx.scale(-1, 1);
+        movableObject.x = movableObject.x * -1;
+    }
+
+    flipImageBack(movableObject) {
+        this.ctx.restore();
+        movableObject.x = movableObject.x * -1;
     }
 }
