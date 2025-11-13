@@ -3,6 +3,9 @@ class World {
     level = level1;
     camera_x = 0;
     backgroundCache = {};
+    statusBar = new StatusBar();
+    statusBarCoin = new StatusBarCoin();
+    statusBarBottle = new StatusBarBottle();
 
     constructor(canvas, keyboard) {
         this.canvas = canvas;
@@ -22,6 +25,7 @@ class World {
             this.level.enemies.forEach((enemy) => {
                 if (this.character.isColliding(enemy)) {
                     this.character.hit();
+                    this.statusBar.setPercentage(this.character.energy);
                     console.log(
                         "Collision with enemy detected!",
                         enemy,
@@ -91,6 +95,14 @@ class World {
         this.ctx.translate(this.camera_x, 0);
         const visibleBackgrounds = this.getVisibleBackgrounds();
         this.addObjectsToMap(visibleBackgrounds);
+
+        this.ctx.translate(-this.camera_x, 0); // back
+        // Space for fixed objects
+        this.addToMap(this.statusBar);
+        this.addToMap(this.statusBarCoin);
+        this.addToMap(this.statusBarBottle);
+        this.ctx.translate(this.camera_x, 0); // forth
+
         this.addObjectsToMap(this.level.clouds);
         this.addObjectsToMap(this.level.enemies);
         this.addToMap(this.character);
