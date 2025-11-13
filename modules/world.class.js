@@ -19,12 +19,18 @@ class World {
 
     checkCollisions() {
         setInterval(() => {
-            this.level.enemies.forEach(enemy => {
+            this.level.enemies.forEach((enemy) => {
                 if (this.character.isColliding(enemy)) {
-                    console.log('Collision with enemy detected!', enemy);
+                    this.character.hit();
+                    console.log(
+                        "Collision with enemy detected!",
+                        enemy,
+                        "Character energy:",
+                        this.character.energy
+                    );
                 }
             });
-        }, 100);
+        }, 500);
     }
 
     getVisibleBackgrounds() {
@@ -32,16 +38,41 @@ class World {
         const tileWidth = 720;
 
         const startTile = Math.floor(-this.camera_x / tileWidth) - 1;
-        const endTile = Math.ceil((-this.camera_x + this.canvas.width) / tileWidth) + 1;
+        const endTile =
+            Math.ceil((-this.camera_x + this.canvas.width) / tileWidth) + 1;
 
         for (let i = startTile; i <= endTile; i++) {
             const xPos = i * tileWidth;
             const variant = Math.abs(i % 2) + 1;
 
-            backgrounds.push(this.getCachedBackground(`air_${i}`, `./img/5_background/layers/air.png`, xPos));
-            backgrounds.push(this.getCachedBackground(`l3_${variant}_${i}`, `./img/5_background/layers/3_third_layer/${variant}.png`, xPos));
-            backgrounds.push(this.getCachedBackground(`l2_${variant}_${i}`, `./img/5_background/layers/2_second_layer/${variant}.png`, xPos));
-            backgrounds.push(this.getCachedBackground(`l1_${variant}_${i}`, `./img/5_background/layers/1_first_layer/${variant}.png`, xPos));
+            backgrounds.push(
+                this.getCachedBackground(
+                    `air_${i}`,
+                    `./img/5_background/layers/air.png`,
+                    xPos
+                )
+            );
+            backgrounds.push(
+                this.getCachedBackground(
+                    `l3_${variant}_${i}`,
+                    `./img/5_background/layers/3_third_layer/${variant}.png`,
+                    xPos
+                )
+            );
+            backgrounds.push(
+                this.getCachedBackground(
+                    `l2_${variant}_${i}`,
+                    `./img/5_background/layers/2_second_layer/${variant}.png`,
+                    xPos
+                )
+            );
+            backgrounds.push(
+                this.getCachedBackground(
+                    `l1_${variant}_${i}`,
+                    `./img/5_background/layers/1_first_layer/${variant}.png`,
+                    xPos
+                )
+            );
         }
         return backgrounds;
     }
@@ -65,13 +96,13 @@ class World {
         this.addToMap(this.character);
         this.ctx.translate(-this.camera_x, 0);
         let self = this;
-        requestAnimationFrame(function() {
+        requestAnimationFrame(function () {
             self.draw();
         });
     }
 
     addObjectsToMap(objects) {
-        objects.forEach(object => {
+        objects.forEach((object) => {
             this.addToMap(object);
         });
     }
