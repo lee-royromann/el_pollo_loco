@@ -6,6 +6,7 @@ class World {
     statusBar = new StatusBar();
     statusBarCoin = new StatusBarCoin();
     statusBarBottle = new StatusBarBottle();
+    throwableObjects = [];
 
     constructor(canvas, keyboard) {
         this.canvas = canvas;
@@ -13,28 +14,45 @@ class World {
         this.keyboard = keyboard;
         this.draw();
         this.setWorld();
-        this.checkCollisions();
+        this.run();
+    }
+
+    run() {
+        setInterval(() => {
+            this.checkCollisions();
+        }, 200);
+        setInterval(() => {
+            this.checkThrowObjects();
+        }, 120);
     }
 
     setWorld() {
         this.character.world = this;
     }
 
+    checkThrowObjects() {
+        if (this.keyboard.D) {
+            let bottle = new ThrowableObject(
+                this.character.x + 50,
+                this.character.y + 100
+            );
+            this.throwableObjects.push(bottle);
+        }
+    }
+
     checkCollisions() {
-        setInterval(() => {
-            this.level.enemies.forEach((enemy) => {
-                if (this.character.isColliding(enemy)) {
-                    this.character.hit();
-                    this.statusBar.setPercentage(this.character.energy);
-                    console.log(
-                        "Collision with enemy detected!",
-                        enemy,
-                        "Character energy:",
-                        this.character.energy
-                    );
-                }
-            });
-        }, 500);
+        this.level.enemies.forEach((enemy) => {
+            if (this.character.isColliding(enemy)) {
+                this.character.hit();
+                this.statusBar.setPercentage(this.character.energy);
+                console.log(
+                    "Collision with enemy detected!",
+                    enemy,
+                    "Character energy:",
+                    this.character.energy
+                );
+            }
+        });
     }
 
     getVisibleBackgrounds() {
@@ -105,6 +123,7 @@ class World {
 
         this.addObjectsToMap(this.level.clouds);
         this.addObjectsToMap(this.level.enemies);
+        this.addObjectsToMap(this.throwableObjects);
         this.addToMap(this.character);
         this.ctx.translate(-this.camera_x, 0);
         let self = this;

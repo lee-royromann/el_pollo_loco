@@ -48,7 +48,7 @@ class Character extends MovableObject {
         this.height = 320;
         this.width = 160;
         this.world;
-        this.speed = 5;
+        this.speed = 8;
         this.jumpAnimationIndex = 0;
         this.offset = {
             top: 120,

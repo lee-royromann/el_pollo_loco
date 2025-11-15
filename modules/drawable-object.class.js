@@ -13,8 +13,18 @@ class DrawableObject {
     }
 
     draw(ctx) {
-        if (this.img) {
-            ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
+        try {
+            if (this.img && this.img.complete && this.img.naturalHeight > 0) {
+                ctx.drawImage(
+                    this.img,
+                    this.x,
+                    this.y,
+                    this.width,
+                    this.height
+                );
+            }
+        } catch (e) {
+            // Bild noch nicht geladen - überspringen
         }
     }
 
