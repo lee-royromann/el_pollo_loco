@@ -20,7 +20,7 @@ class World {
     run() {
         setInterval(() => {
             this.checkCollisions();
-        }, 200);
+        }, 1000 / 60); // 60 FPS - gleiche Frequenz wie die Bewegung
         setInterval(() => {
             this.checkThrowObjects();
         }, 120);
@@ -44,17 +44,33 @@ class World {
 
     checkCollisions() {
         this.level.enemies.forEach((enemy) => {
-            if (this.character.isColliding(enemy)) {
-                this.character.hit();
-                this.statusBar.setPercentage(this.character.energy);
-                console.log(
-                    "Collision with enemy detected!",
-                    enemy,
-                    "Character energy:",
-                    this.character.energy
-                );
+            if (this.character.isColliding(enemy) && !enemy.isDead) {
+                if (this.isJumpingOnEnemy(enemy)) {
+                    this.killEnemy(enemy);
+                } else if (!this.character.isHurt()) {
+                    this.character.hit();
+                    this.statusBar.setPercentage(this.character.energy);
+                }
             }
         });
+    }
+
+    isJumpingOnEnemy(enemy) {
+        return (
+            this.character.speedY < 0 &&
+            this.character.y < 120 &&
+            this.character.y < enemy.y - 50
+        );
+    }
+
+    killEnemy(enemy) {
+        enemy.kill();
+        setTimeout(() => {
+            const index = this.level.enemies.indexOf(enemy);
+            if (index > -1) {
+                this.level.enemies.splice(index, 1);
+            }
+        }, 2000);
     }
 
     getVisibleBackgrounds() {

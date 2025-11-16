@@ -2,6 +2,10 @@ let canvas;
 let world;
 let keyboard = new Keyboard();
 
+let sounds = {
+    chickenDead: new Audio("audio/chicken_hurt.wav"),
+};
+
 function init() {
     canvas = document.getElementById("canvas");
     world = new World(canvas, keyboard);
