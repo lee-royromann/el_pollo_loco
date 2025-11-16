@@ -81,6 +81,8 @@ class Character extends MovableObject {
         this.lastAction = new Date().getTime();
         this.coins = 0;
         this.maxCoins = 14;
+        this.bottles = 0;
+        this.maxBottles = 10;
         this.offset = {
             top: 120,
             bottom: 30,

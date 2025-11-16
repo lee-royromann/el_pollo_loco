@@ -31,11 +31,14 @@ class Coin extends MovableObject {
         try {
             if (this.img && this.img.complete && this.img.naturalHeight > 0) {
                 ctx.save();
-                ctx.translate(this.x + this.width / 2, this.y + this.height / 2);
-                
+                ctx.translate(
+                    this.x + this.width / 2,
+                    this.y + this.height / 2
+                );
+
                 let scaleX = Math.cos((this.rotationAngle * Math.PI) / 180);
                 ctx.scale(scaleX, 1);
-                
+
                 ctx.drawImage(
                     this.img,
                     -this.width / 2,

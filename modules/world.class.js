@@ -25,6 +25,7 @@ class World {
             this.checkCollisions();
             this.checkBottleCollisions();
             this.checkCoinCollisions();
+            this.checkBottleCollections();
         }, 1000 / 60);
         setInterval(() => {
             this.checkThrowObjects();
@@ -39,7 +40,7 @@ class World {
     }
 
     checkThrowObjects() {
-        if (this.keyboard.D) {
+        if (this.keyboard.D && this.character.bottles > 0) {
             let direction = this.character.otherDirection ? -1 : 1;
             let bottle = new ThrowableObject(
                 this.character.x + 50,
@@ -47,6 +48,10 @@ class World {
                 direction
             );
             this.throwableObjects.push(bottle);
+            this.character.bottles--;
+            let percentage =
+                (this.character.bottles / this.character.maxBottles) * 100;
+            this.statusBarBottle.setPercentage(percentage);
             this.character.lastAction = new Date().getTime();
             sounds.characterThrow.currentTime = 0;
             sounds.characterThrow.play();
@@ -142,8 +147,23 @@ class World {
                 sounds.coinCollect.play();
                 this.character.coins++;
                 this.level.coins.splice(coinIndex, 1);
-                let percentage = (this.character.coins / this.character.maxCoins) * 100;
+                let percentage =
+                    (this.character.coins / this.character.maxCoins) * 100;
                 this.statusBarCoin.setPercentage(percentage);
+            }
+        });
+    }
+
+    checkBottleCollections() {
+        this.level.bottles.forEach((bottle, bottleIndex) => {
+            if (this.character.isColliding(bottle)) {
+                sounds.bottleCollect.currentTime = 0;
+                sounds.bottleCollect.play();
+                this.character.bottles++;
+                this.level.bottles.splice(bottleIndex, 1);
+                let percentage =
+                    (this.character.bottles / this.character.maxBottles) * 100;
+                this.statusBarBottle.setPercentage(percentage);
             }
         });
     }
@@ -274,6 +294,7 @@ class World {
 
         this.addObjectsToMap(this.level.clouds);
         this.addObjectsToMap(this.level.coins);
+        this.addObjectsToMap(this.level.bottles);
         this.addObjectsToMap(this.level.enemies);
         this.addObjectsToMap(this.throwableObjects);
         this.addToMap(this.character);
