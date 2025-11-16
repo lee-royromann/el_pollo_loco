@@ -7,11 +7,14 @@ class World {
     statusBarCoin = new StatusBarCoin();
     statusBarBottle = new StatusBarBottle();
     throwableObjects = [];
+    lastCharacterX = 100;
+    lastSpawnTime = 0;
 
     constructor(canvas, keyboard) {
         this.canvas = canvas;
         this.ctx = canvas.getContext("2d");
         this.keyboard = keyboard;
+        this.lastSpawnTime = new Date().getTime(); // Starte mit aktuellem Timestamp
         this.draw();
         this.setWorld();
         this.run();
@@ -20,10 +23,13 @@ class World {
     run() {
         setInterval(() => {
             this.checkCollisions();
-        }, 1000 / 60); // 60 FPS - gleiche Frequenz wie die Bewegung
+        }, 1000 / 60);
         setInterval(() => {
             this.checkThrowObjects();
         }, 120);
+        setInterval(() => {
+            this.checkEnemySpawn();
+        }, 500);
     }
 
     setWorld() {
@@ -45,7 +51,12 @@ class World {
     checkCollisions() {
         this.level.enemies.forEach((enemy) => {
             if (this.character.isColliding(enemy) && !enemy.isDead) {
-                if (this.isJumpingOnEnemy(enemy)) {
+                if (enemy.constructor.name === 'Endboss') {
+                    if (!this.character.isHurt()) {
+                        this.character.hit();
+                        this.statusBar.setPercentage(this.character.energy);
+                    }
+                } else if (this.isJumpingOnEnemy(enemy)) {
                     this.killEnemy(enemy);
                 } else if (!this.character.isHurt()) {
                     this.character.hit();
@@ -71,6 +82,38 @@ class World {
                 this.level.enemies.splice(index, 1);
             }
         }, 2000);
+    }
+
+    checkEnemySpawn() {
+        let currentTime = new Date().getTime();
+        let timeSinceLastSpawn = currentTime - this.lastSpawnTime;
+
+        let aliveChickens = 0;
+        this.level.enemies.forEach((enemy) => {
+            if (enemy.constructor.name === "Chicken" && !enemy.isDead) {
+                aliveChickens++;
+            }
+        });
+
+        if (
+            this.character.x < this.lastCharacterX &&
+            aliveChickens < 5 &&
+            timeSinceLastSpawn > 3000
+        ) {
+            let spawnX;
+            if (Math.random() < 0.5) {
+                spawnX = this.character.x + 800 + Math.random() * 400;
+            } else {
+                spawnX = this.character.x - 800 - Math.random() * 400;
+            }
+            
+            if (spawnX > 0 && spawnX < this.level.level_end_x) {
+                this.level.enemies.push(new Chicken(spawnX));
+                this.lastSpawnTime = currentTime;
+            }
+        }
+
+        this.lastCharacterX = this.character.x;
     }
 
     getVisibleBackgrounds() {
