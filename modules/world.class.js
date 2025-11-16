@@ -23,6 +23,7 @@ class World {
     run() {
         setInterval(() => {
             this.checkCollisions();
+            this.checkBottleCollisions();
         }, 1000 / 60);
         setInterval(() => {
             this.checkThrowObjects();
@@ -64,6 +65,21 @@ class World {
                     this.statusBar.setPercentage(this.character.energy);
                 }
             }
+        });
+    }
+
+    checkBottleCollisions() {
+        this.throwableObjects.forEach((bottle, bottleIndex) => {
+            this.level.enemies.forEach((enemy) => {
+                if (bottle.isColliding(enemy) && !enemy.isDead) {
+                    if (enemy.constructor.name === "Endboss") {
+                        enemy.hit();
+                    } else {
+                        this.killEnemy(enemy);
+                    }
+                    this.throwableObjects.splice(bottleIndex, 1);
+                }
+            });
         });
     }
 

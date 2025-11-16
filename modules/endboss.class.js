@@ -11,6 +11,7 @@ class Endboss extends MovableObject {
     ];
 
     isDead = false;
+    energy = 5;
 
     constructor() {
         super().loadImage(this.IMAGES_WALKING[0]);
@@ -33,5 +34,18 @@ class Endboss extends MovableObject {
         setInterval(() => {
             this.playAnimation(this.IMAGES_WALKING);
         }, 200);
+    }
+
+    hit() {
+        this.energy--;
+        if (this.energy <= 0) {
+            this.kill();
+        }
+    }
+
+    kill() {
+        this.isDead = true;
+        this.speed = 0;
+        sounds.endbossDead.play();
     }
 }
