@@ -135,7 +135,7 @@ class Character extends MovableObject {
             ) {
                 this.playAnimation(this.IMAGES_WALKING);
             }
-        }, 50);
+        }, 100);
 
         setInterval(() => {
             if (
@@ -146,7 +146,8 @@ class Character extends MovableObject {
                 !this.isAboveGround() &&
                 this.jumpAnimationIndex === 0
             ) {
-                let timeSinceLastAction = new Date().getTime() - this.lastAction;
+                let timeSinceLastAction =
+                    new Date().getTime() - this.lastAction;
                 if (timeSinceLastAction > 5000) {
                     this.playAnimation(this.IMAGES_LONG_IDLE);
                 } else {
@@ -161,5 +162,14 @@ class Character extends MovableObject {
                 this.lastAction = new Date().getTime();
             }
         }, 100);
+
+        setInterval(() => {
+            if (
+                (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) &&
+                !this.isAboveGround()
+            ) {
+                sounds.characterWalking.play();
+            }
+        }, 200);
     }
 }
