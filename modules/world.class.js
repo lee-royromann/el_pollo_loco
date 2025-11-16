@@ -77,6 +77,7 @@ class World {
                     } else {
                         this.killEnemy(enemy);
                     }
+                    sounds.bottleBreaks.play();
                     this.throwableObjects.splice(bottleIndex, 1);
                 }
             });

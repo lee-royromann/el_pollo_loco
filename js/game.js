@@ -7,6 +7,7 @@ let sounds = {
     smallChickenDead: new Audio("audio/chicken_small_hurt.wav"),
     endbossDead: new Audio("audio/chicken_endboss_hurt.wav"),
     characterHurt: new Audio("audio/character_hurt.wav"),
+    bottleBreaks: new Audio("audio/bottle_breaks.wav"),
 };
 
 function init() {
