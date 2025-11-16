@@ -6,10 +6,22 @@ class ThrowableObject extends MovableObject {
         "./img/6_salsa_bottle/bottle_rotation/4_bottle_rotation.png",
     ];
 
+    IMAGES_SPLASH = [
+        "./img/6_salsa_bottle/bottle_rotation/bottle_splash/1_bottle_splash.png",
+        "./img/6_salsa_bottle/bottle_rotation/bottle_splash/2_bottle_splash.png",
+        "./img/6_salsa_bottle/bottle_rotation/bottle_splash/3_bottle_splash.png",
+        "./img/6_salsa_bottle/bottle_rotation/bottle_splash/4_bottle_splash.png",
+        "./img/6_salsa_bottle/bottle_rotation/bottle_splash/5_bottle_splash.png",
+        "./img/6_salsa_bottle/bottle_rotation/bottle_splash/6_bottle_splash.png",
+    ];
+
+    isSplashing = false;
+
     constructor(x, y, direction) {
         super();
         this.loadImage(this.IMAGES_BOTTLES[0]);
         this.loadImages(this.IMAGES_BOTTLES);
+        this.loadImages(this.IMAGES_SPLASH);
         this.x = x;
         this.y = y;
         this.width = 50;
@@ -36,14 +48,34 @@ class ThrowableObject extends MovableObject {
     throw() {
         this.speedY = 20;
         this.applyGravity();
-        setInterval(() => {
-            this.x += 10 * this.direction;
+        this.throwInterval = setInterval(() => {
+            if (!this.isSplashing) {
+                this.x += 10 * this.direction;
+            }
         }, 1000 / 60);
     }
 
     animate() {
         setInterval(() => {
-            this.playAnimation(this.IMAGES_BOTTLES);
+            if (!this.isSplashing) {
+                this.playAnimation(this.IMAGES_BOTTLES);
+            }
         }, 50);
+    }
+
+    splash() {
+        this.isSplashing = true;
+        this.speedY = 0;
+        this.acceleration = 0;
+        clearInterval(this.throwInterval);
+        let i = 0;
+        let splashInterval = setInterval(() => {
+            if (i < this.IMAGES_SPLASH.length) {
+                this.loadImage(this.IMAGES_SPLASH[i]);
+                i++;
+            } else {
+                clearInterval(splashInterval);
+            }
+        }, 100);
     }
 }

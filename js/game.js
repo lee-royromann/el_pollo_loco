@@ -11,7 +11,10 @@ let sounds = {
     characterWalking: new Audio("audio/character_walking.wav"),
     characterJump: new Audio("audio/character_jump.wav"),
     characterThrow: new Audio("audio/character_throw.wav"),
+    characterSnoring: new Audio("audio/character_snoring.wav"),
 };
+
+sounds.characterSnoring.loop = true;
 
 function init() {
     canvas = document.getElementById("canvas");

@@ -150,8 +150,20 @@ class Character extends MovableObject {
                     new Date().getTime() - this.lastAction;
                 if (timeSinceLastAction > 5000) {
                     this.playAnimation(this.IMAGES_LONG_IDLE);
+                    if (sounds.characterSnoring.paused) {
+                        sounds.characterSnoring.play();
+                    }
                 } else {
                     this.playAnimation(this.IMAGES_IDLE);
+                    if (!sounds.characterSnoring.paused) {
+                        sounds.characterSnoring.pause();
+                        sounds.characterSnoring.currentTime = 0;
+                    }
+                }
+            } else {
+                if (!sounds.characterSnoring.paused) {
+                    sounds.characterSnoring.pause();
+                    sounds.characterSnoring.currentTime = 0;
                 }
             }
         }, 150);

@@ -73,7 +73,7 @@ class World {
     checkBottleCollisions() {
         this.throwableObjects.forEach((bottle, bottleIndex) => {
             this.level.enemies.forEach((enemy) => {
-                if (bottle.isColliding(enemy) && !enemy.isDead) {
+                if (bottle.isColliding(enemy) && !enemy.isDead && !bottle.isSplashing) {
                     if (enemy.constructor.name === "Endboss") {
                         enemy.hit();
                     } else {
@@ -81,7 +81,39 @@ class World {
                     }
                     sounds.bottleBreaks.currentTime = 0;
                     sounds.bottleBreaks.play();
-                    this.throwableObjects.splice(bottleIndex, 1);
+                    
+                    let enemyCenterX = enemy.x + enemy.width / 2;
+                    let enemyCenterY = enemy.y + enemy.height / 2;
+                    let offsetLeft = enemy.offset?.left || 0;
+                    let offsetRight = enemy.offset?.right || 0;
+                    let offsetTop = enemy.offset?.top || 0;
+                    let offsetBottom = enemy.offset?.bottom || 0;
+                    
+                    let availableWidth = enemy.width - offsetLeft - offsetRight;
+                    let availableHeight = enemy.height - offsetTop - offsetBottom;
+                    let insetX = availableWidth * 0.25;
+                    let insetY = availableHeight * 0.25;
+                    
+                    if (enemy.constructor.name === "SmallChicken") {
+                        insetY = 0;
+                    }
+                    
+                    if (bottle.x < enemyCenterX) {
+                        bottle.x = enemy.x + offsetLeft + insetX;
+                    } else {
+                        bottle.x = enemy.x + enemy.width - offsetRight - bottle.width - insetX;
+                    }
+                    
+                    if (bottle.y < enemyCenterY) {
+                        bottle.y = enemy.y + offsetTop + insetY;
+                    } else {
+                        bottle.y = enemy.y + enemy.height - offsetBottom - bottle.height - insetY;
+                    }
+                    
+                    bottle.splash();
+                    setTimeout(() => {
+                        this.throwableObjects.splice(bottleIndex, 1);
+                    }, 600);
                 }
             });
         });
