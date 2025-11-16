@@ -9,6 +9,8 @@ let sounds = {
     characterHurt: new Audio("audio/character_hurt.wav"),
     bottleBreaks: new Audio("audio/bottle_breaks.wav"),
     characterWalking: new Audio("audio/character_walking.wav"),
+    characterJump: new Audio("audio/character_jump.wav"),
+    characterThrow: new Audio("audio/character_throw.wav"),
 };
 
 function init() {

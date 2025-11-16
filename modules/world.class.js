@@ -47,6 +47,8 @@ class World {
             );
             this.throwableObjects.push(bottle);
             this.character.lastAction = new Date().getTime();
+            sounds.characterThrow.currentTime = 0;
+            sounds.characterThrow.play();
         }
     }
 
