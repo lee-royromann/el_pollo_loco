@@ -6,6 +6,7 @@ class World {
     statusBar = new StatusBar();
     statusBarCoin = new StatusBarCoin();
     statusBarBottle = new StatusBarBottle();
+    statusBarEndboss = new StatusBarEndboss();
     throwableObjects = [];
     lastCharacterX = 100;
     lastSpawnTime = 0;
@@ -33,6 +34,15 @@ class World {
         setInterval(() => {
             this.checkEnemySpawn();
         }, 500);
+        this.scheduleNextCloudSpawn();
+    }
+
+    scheduleNextCloudSpawn() {
+        const randomDelay = 10000 + Math.random() * 20000; // 5-25 Sekunden
+        setTimeout(() => {
+            this.spawnCloud();
+            this.scheduleNextCloudSpawn();
+        }, randomDelay);
     }
 
     setWorld() {
@@ -86,6 +96,8 @@ class World {
                 ) {
                     if (enemy.constructor.name === "Endboss") {
                         enemy.hit();
+                        let percentage = (enemy.energy / 5) * 100;
+                        this.statusBarEndboss.setPercentage(percentage);
                     } else {
                         this.killEnemy(enemy);
                     }
@@ -226,6 +238,17 @@ class World {
         this.lastCharacterX = this.character.x;
     }
 
+    spawnCloud() {
+        const spawnX = -this.camera_x + this.canvas.width + 100;
+        const randomY = 20 + Math.random() * 80; // Y btw 20 and 100
+        const newCloud = new Cloud(spawnX);
+        newCloud.y = randomY;
+        this.level.clouds.push(newCloud);
+        this.level.clouds = this.level.clouds.filter(
+            (cloud) => cloud.x > -this.camera_x - 1000
+        );
+    }
+
     getVisibleBackgrounds() {
         const backgrounds = [];
         const tileWidth = 720;
@@ -284,20 +307,22 @@ class World {
         this.ctx.translate(this.camera_x, 0);
         const visibleBackgrounds = this.getVisibleBackgrounds();
         this.addObjectsToMap(visibleBackgrounds);
+        this.addObjectsToMap(this.level.clouds);
 
         this.ctx.translate(-this.camera_x, 0); // back
         // Space for fixed objects
         this.addToMap(this.statusBar);
         this.addToMap(this.statusBarCoin);
         this.addToMap(this.statusBarBottle);
+        this.addToMap(this.statusBarEndboss);
         this.ctx.translate(this.camera_x, 0); // forth
 
-        this.addObjectsToMap(this.level.clouds);
         this.addObjectsToMap(this.level.coins);
         this.addObjectsToMap(this.level.bottles);
         this.addObjectsToMap(this.level.enemies);
         this.addObjectsToMap(this.throwableObjects);
         this.addToMap(this.character);
+
         this.ctx.translate(-this.camera_x, 0);
         let self = this;
         requestAnimationFrame(function () {
@@ -316,7 +341,6 @@ class World {
             this.flipImage(movableObject);
         }
         movableObject.draw(this.ctx);
-        movableObject.drawFrame(this.ctx);
         if (movableObject.otherDirection) {
             this.flipImageBack(movableObject);
         }

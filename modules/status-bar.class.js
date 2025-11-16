@@ -99,3 +99,40 @@ class StatusBarBottle extends DrawableObject {
         return 0;
     }
 }
+
+class StatusBarEndboss extends DrawableObject {
+    percentage = 100;
+    IMAGES = [
+        "./img/7_statusbars/2_statusbar_endboss/orange/orange0.png",
+        "./img/7_statusbars/2_statusbar_endboss/orange/orange20.png",
+        "./img/7_statusbars/2_statusbar_endboss/orange/orange40.png",
+        "./img/7_statusbars/2_statusbar_endboss/orange/orange60.png",
+        "./img/7_statusbars/2_statusbar_endboss/orange/orange80.png",
+        "./img/7_statusbars/2_statusbar_endboss/orange/orange100.png",
+    ];
+
+    constructor() {
+        super();
+        this.loadImage(this.IMAGES[5]);
+        this.loadImages(this.IMAGES);
+        this.x = 500;
+        this.y = 8;
+        this.width = 200;
+        this.height = 60;
+    }
+
+    setPercentage(percentage) {
+        this.percentage = percentage;
+        let imagePath = this.IMAGES[this.resolveImageIndex(percentage)];
+        this.img = this.imageCache[imagePath];
+    }
+
+    resolveImageIndex(percentage) {
+        if (percentage == 100) return 5;
+        if (percentage > 80) return 4;
+        if (percentage > 60) return 3;
+        if (percentage > 40) return 2;
+        if (percentage > 20) return 1;
+        return 0;
+    }
+}

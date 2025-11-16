@@ -16,7 +16,16 @@ const level1 = new Level(
         new SmallChicken(),
         new Endboss(),
     ],
-    [new Cloud()],
+    [
+        new Cloud(200 + Math.random() * 300),
+        new Cloud(700 + Math.random() * 300),
+        new Cloud(1200 + Math.random() * 300),
+        new Cloud(1800 + Math.random() * 300),
+        new Cloud(2400 + Math.random() * 300),
+        new Cloud(3000 + Math.random() * 300),
+        new Cloud(3600 + Math.random() * 300),
+        new Cloud(4200 + Math.random() * 300),
+    ],
     [
         new Coin(500 + Math.random() * 200, 100 + Math.random() * 150),
         new Coin(800 + Math.random() * 200, 100 + Math.random() * 150),
