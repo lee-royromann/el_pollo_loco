@@ -49,6 +49,19 @@ class Character extends MovableObject {
         "./img/2_character_pepe/1_idle/idle/I-10.png",
     ];
 
+    IMAGES_LONG_IDLE = [
+        "./img/2_character_pepe/1_idle/long_idle/I-11.png",
+        "./img/2_character_pepe/1_idle/long_idle/I-12.png",
+        "./img/2_character_pepe/1_idle/long_idle/I-13.png",
+        "./img/2_character_pepe/1_idle/long_idle/I-14.png",
+        "./img/2_character_pepe/1_idle/long_idle/I-15.png",
+        "./img/2_character_pepe/1_idle/long_idle/I-16.png",
+        "./img/2_character_pepe/1_idle/long_idle/I-17.png",
+        "./img/2_character_pepe/1_idle/long_idle/I-18.png",
+        "./img/2_character_pepe/1_idle/long_idle/I-19.png",
+        "./img/2_character_pepe/1_idle/long_idle/I-20.png",
+    ];
+
     constructor() {
         super().loadImage("./img/2_character_pepe/1_idle/idle/I-1.png");
         this.loadImages(this.IMAGES_WALKING);
@@ -56,6 +69,7 @@ class Character extends MovableObject {
         this.loadImages(this.IMAGES_DEAD);
         this.loadImages(this.IMAGES_HURT);
         this.loadImages(this.IMAGES_IDLE);
+        this.loadImages(this.IMAGES_LONG_IDLE);
         this.applyGravity();
         this.x = 100;
         this.y = 120;
@@ -64,6 +78,7 @@ class Character extends MovableObject {
         this.world;
         this.speed = 8;
         this.jumpAnimationIndex = 0;
+        this.lastAction = new Date().getTime();
         this.offset = {
             top: 120,
             bottom: 30,
@@ -99,9 +114,11 @@ class Character extends MovableObject {
             ) {
                 this.moveRight();
                 this.otherDirection = false;
+                this.lastAction = new Date().getTime();
             } else if (this.world.keyboard.LEFT && this.x > 0) {
                 this.moveLeft();
                 this.otherDirection = true;
+                this.lastAction = new Date().getTime();
             }
             this.world.camera_x = -this.x + 100;
         }, 1000 / 60);
@@ -129,13 +146,19 @@ class Character extends MovableObject {
                 !this.isAboveGround() &&
                 this.jumpAnimationIndex === 0
             ) {
-                this.playAnimation(this.IMAGES_IDLE);
+                let timeSinceLastAction = new Date().getTime() - this.lastAction;
+                if (timeSinceLastAction > 5000) {
+                    this.playAnimation(this.IMAGES_LONG_IDLE);
+                } else {
+                    this.playAnimation(this.IMAGES_IDLE);
+                }
             }
         }, 150);
 
         setInterval(() => {
             if (this.world.keyboard.SPACE && !this.isAboveGround()) {
                 this.jump();
+                this.lastAction = new Date().getTime();
             }
         }, 100);
     }

@@ -45,6 +45,7 @@ class World {
                 direction
             );
             this.throwableObjects.push(bottle);
+            this.character.lastAction = new Date().getTime();
         }
     }
 
