@@ -166,10 +166,12 @@ class Character extends MovableObject {
         setInterval(() => {
             if (
                 (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) &&
-                !this.isAboveGround()
+                !this.isAboveGround() &&
+                !this.isHurt()
             ) {
+                sounds.characterWalking.currentTime = 0;
                 sounds.characterWalking.play();
             }
-        }, 200);
+        }, 350);
     }
 }
