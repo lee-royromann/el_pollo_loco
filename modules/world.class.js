@@ -51,7 +51,7 @@ class World {
     checkCollisions() {
         this.level.enemies.forEach((enemy) => {
             if (this.character.isColliding(enemy) && !enemy.isDead) {
-                if (enemy.constructor.name === 'Endboss') {
+                if (enemy.constructor.name === "Endboss") {
                     if (!this.character.isHurt()) {
                         this.character.hit();
                         this.statusBar.setPercentage(this.character.energy);
@@ -90,14 +90,18 @@ class World {
 
         let aliveChickens = 0;
         this.level.enemies.forEach((enemy) => {
-            if (enemy.constructor.name === "Chicken" && !enemy.isDead) {
+            if (
+                (enemy.constructor.name === "Chicken" ||
+                    enemy.constructor.name === "SmallChicken") &&
+                !enemy.isDead
+            ) {
                 aliveChickens++;
             }
         });
 
         if (
             this.character.x < this.lastCharacterX &&
-            aliveChickens < 5 &&
+            aliveChickens < 8 &&
             timeSinceLastSpawn > 3000
         ) {
             let spawnX;
@@ -106,9 +110,13 @@ class World {
             } else {
                 spawnX = this.character.x - 800 - Math.random() * 400;
             }
-            
+
             if (spawnX > 0 && spawnX < this.level.level_end_x) {
-                this.level.enemies.push(new Chicken(spawnX));
+                if (Math.random() < 0.5) {
+                    this.level.enemies.push(new Chicken(spawnX));
+                } else {
+                    this.level.enemies.push(new SmallChicken(spawnX));
+                }
                 this.lastSpawnTime = currentTime;
             }
         }

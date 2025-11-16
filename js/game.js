@@ -3,7 +3,9 @@ let world;
 let keyboard = new Keyboard();
 
 let sounds = {
-    chickenDead: new Audio("audio/chicken_hurt.wav"),
+    chickenDead: new Audio("audio/chicken_normal_hurt.wav"),
+    smallChickenDead: new Audio("audio/chicken_small_hurt.wav"),
+    endbossDead: new Audio("audio/chicken_endboss_hurt.wav"),
 };
 
 function init() {
