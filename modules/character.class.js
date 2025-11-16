@@ -79,6 +79,8 @@ class Character extends MovableObject {
         this.speed = 8;
         this.jumpAnimationIndex = 0;
         this.lastAction = new Date().getTime();
+        this.coins = 0;
+        this.maxCoins = 14;
         this.offset = {
             top: 120,
             bottom: 30,
