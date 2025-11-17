@@ -47,6 +47,12 @@ class World {
 
     setWorld() {
         this.character.world = this;
+        let endboss = this.level.enemies.find(
+            (enemy) => enemy.constructor.name === "Endboss"
+        );
+        if (endboss) {
+            endboss.world = this;
+        }
     }
 
     checkThrowObjects() {
