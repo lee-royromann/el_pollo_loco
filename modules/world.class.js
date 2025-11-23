@@ -10,6 +10,7 @@ class World {
     throwableObjects = [];
     lastCharacterX = 100;
     lastSpawnTime = 0;
+    gameOverShown = false;
 
     constructor(canvas, keyboard) {
         this.canvas = canvas;
@@ -334,6 +335,21 @@ class World {
         requestAnimationFrame(function () {
             self.draw();
         });
+
+        // Update overlays after drawing
+        this.updateGameOverOverlay();
+    }
+
+    updateGameOverOverlay() {
+        if (!this.character) return;
+        const overlay = document.getElementById("gameover-overlay");
+        if (!overlay) return;
+        if (this.character.isDead() && (this.character.deathAnimationDone || this.character.deathFrameIndex >= this.character.IMAGES_DEAD.length)) {
+            if (!this.gameOverShown) {
+                overlay.style.display = "flex";
+                this.gameOverShown = true;
+            }
+        }
     }
 
     addObjectsToMap(objects) {

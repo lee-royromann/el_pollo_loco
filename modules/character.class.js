@@ -83,6 +83,9 @@ class Character extends MovableObject {
         this.maxCoins = 14;
         this.bottles = 0;
         this.maxBottles = 10;
+        this.deathSoundPlayed = false;
+        this.deathAnimationDone = false;
+        this.deathFrameIndex = 0;
         this.offset = {
             top: 120,
             bottom: 30,
@@ -129,7 +132,13 @@ class Character extends MovableObject {
 
         setInterval(() => {
             if (this.isDead()) {
-                this.playAnimation(this.IMAGES_DEAD);
+                if (!this.deathSoundPlayed) {
+                    sounds.characterDead.play();
+                    this.deathSoundPlayed = true;
+                }
+                if (!this.deathAnimationDone) {
+                    this.playDeathOnce();
+                }
             } else if (this.isHurt()) {
                 this.playAnimation(this.IMAGES_HURT);
             } else if (
@@ -191,5 +200,34 @@ class Character extends MovableObject {
                 sounds.characterWalking.play();
             }
         }, 350);
+    }
+
+    playDeathOnce() {
+        // Spiele die Todes-Frames genau einmal und bleibe auf dem letzten Bild stehen
+        if (this.deathFrameIndex < this.IMAGES_DEAD.length) {
+            const path = this.IMAGES_DEAD[this.deathFrameIndex];
+            const img = this.imageCache[path];
+            if (img) {
+                this.img = img;
+            }
+            this.deathFrameIndex++;
+            if (this.deathFrameIndex >= this.IMAGES_DEAD.length) {
+                // Nach kompletter Sequenz auf erstes Dead-Bild (D-51) einfrieren
+                const firstPath = this.IMAGES_DEAD[0];
+                const firstImg = this.imageCache[firstPath];
+                if (firstImg) {
+                    this.img = firstImg;
+                }
+                this.deathAnimationDone = true;
+            }
+        } else {
+            // Falls bereits durchgelaufen, sicherstellen, dass D-51 angezeigt wird
+            const firstPath = this.IMAGES_DEAD[0];
+            const firstImg = this.imageCache[firstPath];
+            if (firstImg) {
+                this.img = firstImg;
+            }
+            this.deathAnimationDone = true;
+        }
     }
 }

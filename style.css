@@ -7,3 +7,25 @@ body {
 canvas {
     background-color: black;
 }
+
+#game-container {
+    position: relative;
+    width: 720px;
+    height: 480px;
+}
+
+#gameover-overlay {
+    position: absolute;
+    inset: 0;
+    display: none; /* becomes flex when shown */
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.35);
+}
+
+#gameover-overlay img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* füllt die komplette Canvas-Fläche */
+    image-rendering: auto;
+}
