@@ -26,6 +26,22 @@ canvas {
 #gameover-overlay img {
     width: 100%;
     height: 100%;
-    object-fit: cover; /* füllt die komplette Canvas-Fläche */
+    object-fit: cover;
+    image-rendering: auto;
+}
+
+#win-overlay {
+    position: absolute;
+    inset: 0;
+    display: none; /* becomes flex when shown */
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.35);
+}
+
+#win-overlay img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
     image-rendering: auto;
 }

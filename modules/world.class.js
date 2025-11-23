@@ -11,6 +11,7 @@ class World {
     lastCharacterX = 100;
     lastSpawnTime = 0;
     gameOverShown = false;
+    winShown = false;
 
     constructor(canvas, keyboard) {
         this.canvas = canvas;
@@ -338,16 +339,39 @@ class World {
 
         // Update overlays after drawing
         this.updateGameOverOverlay();
+        this.updateWinOverlay();
     }
 
     updateGameOverOverlay() {
         if (!this.character) return;
         const overlay = document.getElementById("gameover-overlay");
         if (!overlay) return;
-        if (this.character.isDead() && (this.character.deathAnimationDone || this.character.deathFrameIndex >= this.character.IMAGES_DEAD.length)) {
+        if (
+            this.character.isDead() &&
+            (this.character.deathAnimationDone ||
+                this.character.deathFrameIndex >=
+                    this.character.IMAGES_DEAD.length)
+        ) {
             if (!this.gameOverShown) {
                 overlay.style.display = "flex";
                 this.gameOverShown = true;
+            }
+        }
+    }
+
+    updateWinOverlay() {
+        const endboss = this.level.enemies.find(
+            (enemy) => enemy.constructor.name === "Endboss"
+        );
+        if (!endboss) return;
+        const overlay = document.getElementById("win-overlay");
+        if (!overlay) return;
+        if (endboss.isDead && endboss.deathAnimationPlayed) {
+            if (!this.winShown) {
+                overlay.style.display = "flex";
+                this.winShown = true;
+                sounds.characterWin.currentTime = 0;
+                sounds.characterWin.play();
             }
         }
     }

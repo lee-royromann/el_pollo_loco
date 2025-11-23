@@ -203,7 +203,6 @@ class Character extends MovableObject {
     }
 
     playDeathOnce() {
-        // Spiele die Todes-Frames genau einmal und bleibe auf dem letzten Bild stehen
         if (this.deathFrameIndex < this.IMAGES_DEAD.length) {
             const path = this.IMAGES_DEAD[this.deathFrameIndex];
             const img = this.imageCache[path];
@@ -212,7 +211,6 @@ class Character extends MovableObject {
             }
             this.deathFrameIndex++;
             if (this.deathFrameIndex >= this.IMAGES_DEAD.length) {
-                // Nach kompletter Sequenz auf erstes Dead-Bild (D-51) einfrieren
                 const firstPath = this.IMAGES_DEAD[0];
                 const firstImg = this.imageCache[firstPath];
                 if (firstImg) {
@@ -221,7 +219,6 @@ class Character extends MovableObject {
                 this.deathAnimationDone = true;
             }
         } else {
-            // Falls bereits durchgelaufen, sicherstellen, dass D-51 angezeigt wird
             const firstPath = this.IMAGES_DEAD[0];
             const firstImg = this.imageCache[firstPath];
             if (firstImg) {

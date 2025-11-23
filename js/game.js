@@ -15,6 +15,7 @@ let sounds = {
     characterSnoring: new Audio("audio/character_snoring.wav"),
     coinCollect: new Audio("audio/coin_collect.wav"),
     bottleCollect: new Audio("audio/bottle_collect.wav"),
+    characterWin: new Audio("audio/character_win.wav"),
 };
 
 sounds.characterSnoring.loop = true;
