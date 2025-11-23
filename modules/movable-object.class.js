@@ -70,12 +70,12 @@ class MovableObject extends DrawableObject {
             this.energy = 0;
         } else {
             this.lastHit = new Date().getTime();
-            sounds.characterHurt.play();
+            playSound(sounds.characterHurt);
         }
     }
 
     isHurt() {
-        let timePassed = new Date().getTime() - this.lastHit; // Wie viel Zeit ist seit dem letzten Treffer vergangen?
+        let timePassed = new Date().getTime() - this.lastHit; // How long ago was the last hit?
         timePassed = timePassed / 1000;
         return timePassed < 0.5;
     }

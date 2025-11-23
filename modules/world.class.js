@@ -72,7 +72,7 @@ class World {
             this.statusBarBottle.setPercentage(percentage);
             this.character.lastAction = new Date().getTime();
             sounds.characterThrow.currentTime = 0;
-            sounds.characterThrow.play();
+            playSound(sounds.characterThrow);
         }
     }
 
@@ -110,7 +110,7 @@ class World {
                         this.killEnemy(enemy);
                     }
                     sounds.bottleBreaks.currentTime = 0;
-                    sounds.bottleBreaks.play();
+                    playSound(sounds.bottleBreaks);
 
                     let enemyCenterX = enemy.x + enemy.width / 2;
                     let enemyCenterY = enemy.y + enemy.height / 2;
@@ -164,7 +164,7 @@ class World {
         this.level.coins.forEach((coin, coinIndex) => {
             if (this.character.isColliding(coin)) {
                 sounds.coinCollect.currentTime = 0;
-                sounds.coinCollect.play();
+                playSound(sounds.coinCollect);
                 this.character.coins++;
                 this.level.coins.splice(coinIndex, 1);
                 let percentage =
@@ -178,7 +178,7 @@ class World {
         this.level.bottles.forEach((bottle, bottleIndex) => {
             if (this.character.isColliding(bottle)) {
                 sounds.bottleCollect.currentTime = 0;
-                sounds.bottleCollect.play();
+                playSound(sounds.bottleCollect);
                 this.character.bottles++;
                 this.level.bottles.splice(bottleIndex, 1);
                 let percentage =
@@ -355,6 +355,10 @@ class World {
             if (!this.gameOverShown) {
                 overlay.style.display = "flex";
                 this.gameOverShown = true;
+                if (typeof sounds !== "undefined" && sounds.backgroundMusic) {
+                    sounds.backgroundMusic.pause();
+                    sounds.backgroundMusic.currentTime = 0;
+                }
             }
         }
     }
@@ -371,7 +375,11 @@ class World {
                 overlay.style.display = "flex";
                 this.winShown = true;
                 sounds.characterWin.currentTime = 0;
-                sounds.characterWin.play();
+                playSound(sounds.characterWin);
+                if (typeof sounds !== "undefined" && sounds.backgroundMusic) {
+                    sounds.backgroundMusic.pause();
+                    sounds.backgroundMusic.currentTime = 0;
+                }
             }
         }
     }

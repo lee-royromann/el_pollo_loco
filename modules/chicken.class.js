@@ -40,7 +40,7 @@ class Chicken extends MovableObject {
     kill() {
         this.isDead = true;
         this.speed = 0;
-        sounds.chickenDead.play();
+        playSound(sounds.chickenDead);
         this.playAnimation(this.IMAGES_DEAD);
     }
 }

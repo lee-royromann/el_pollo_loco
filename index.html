@@ -29,12 +29,62 @@
     <script src="js/game.js" defer></script>
 </head>
 
-<body onload="init()">
+<body>
 
     <h1>El Pollo Loco</h1>
 
     <div id="game-container">
         <canvas id="canvas" width="720" height="480"></canvas>
+        <div id="start-overlay">
+            <img src="img/9_intro_outro_screens/start/startscreen_1.png" alt="El Pollo Loco Start Screen"
+                class="start-bg" />
+            <div class="start-buttons">
+                <button id="start-btn" class="btn-start">START</button>
+                <div class="icon-buttons">
+                    <button id="info-btn" class="btn-icon" title="Game Info" aria-label="Game Info">
+                        <span class="icon-info">i</span>
+                    </button>
+                    <button id="keyboard-btn" class="btn-icon" title="Controls" aria-label="Controls">
+                        <svg class="icon-keyboard" viewBox="0 0 24 24" fill="currentColor">
+                            <rect x="2" y="6" width="20" height="12" rx="2" stroke="currentColor" stroke-width="1.5"
+                                fill="none" />
+                            <line x1="5" y1="10" x2="7" y2="10" stroke="currentColor" stroke-width="1.5" />
+                            <line x1="9" y1="10" x2="11" y2="10" stroke="currentColor" stroke-width="1.5" />
+                            <line x1="13" y1="10" x2="15" y2="10" stroke="currentColor" stroke-width="1.5" />
+                            <line x1="17" y1="10" x2="19" y2="10" stroke="currentColor" stroke-width="1.5" />
+                            <line x1="7" y1="14" x2="17" y2="14" stroke="currentColor" stroke-width="1.5" />
+                        </svg>
+                    </button>
+                    <button id="sound-btn" class="btn-icon" title="Toggle Sound" aria-label="Toggle Sound">
+                        <svg class="icon-sound" viewBox="0 0 24 24" fill="currentColor">
+                            <path
+                                d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"
+                                fill="currentColor" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div id="info-modal" class="modal" aria-hidden="true">
+            <div class="modal-content">
+                <button class="modal-close" aria-label="Close">&times;</button>
+                <h2>About El Pollo Loco</h2>
+                <p>A classic jump & run game where you help Pepe defeat the evil chicken boss!</p>
+                <p><strong>Developer:</strong> Lee-Roy Romann</p>
+                <p><a href="#" target="_blank">Impressum</a></p>
+            </div>
+        </div>
+        <div id="keyboard-modal" class="modal" aria-hidden="true">
+            <div class="modal-content">
+                <button class="modal-close" aria-label="Close">&times;</button>
+                <h2>Game Controls</h2>
+                <ul class="controls-list">
+                    <li><strong>←/→</strong> Move left/right</li>
+                    <li><strong>↑ / Space</strong> Jump</li>
+                    <li><strong>D</strong> Throw bottle</li>
+                </ul>
+            </div>
+        </div>
         <div id="gameover-overlay" aria-hidden="true">
             <img src="img/9_intro_outro_screens/game_over/game over.png" alt="Game Over" />
         </div>

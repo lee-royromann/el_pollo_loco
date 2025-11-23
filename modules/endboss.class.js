@@ -111,7 +111,6 @@ class Endboss extends MovableObject {
                 let absDistance = Math.abs(distance);
 
                 if (this.isAttacking) {
-                    // Während Attack: Moderat auf Character zu bewegen
                     if (distance > 20) {
                         this.x -= 4;
                         this.otherDirection = false;
@@ -119,9 +118,7 @@ class Endboss extends MovableObject {
                         this.x += 4;
                         this.otherDirection = true;
                     }
-                    // Bei sehr kleiner Distanz (<20px) nicht mehr bewegen bzw. hin und her flippern
                 } else if (absDistance < 250 && this.canAttack()) {
-                    // In Angriffsreichweite und bereit, dann Blickrichtung setzen und angreifen
                     if (distance > 0) {
                         this.otherDirection = false;
                     } else {
@@ -129,7 +126,6 @@ class Endboss extends MovableObject {
                     }
                     this.attack();
                 } else if (absDistance < 250 && !this.canAttack()) {
-                    // In Angriffsreichweite aber Cooldown, dann leicht zurückweichen mit Dead-Zone
                     if (distance > 30) {
                         this.x += 0.8;
                         this.otherDirection = false;
@@ -137,9 +133,7 @@ class Endboss extends MovableObject {
                         this.x -= 0.8;
                         this.otherDirection = true;
                     }
-                    // Dead-Zone 30px: keine Bewegung und keine Richtungsänderung
                 } else if (absDistance >= 250) {
-                    // Zu weit weg, dann normal verfolgen
                     if (distance > 0) {
                         this.moveLeft();
                         this.otherDirection = false;
@@ -154,7 +148,7 @@ class Endboss extends MovableObject {
 
     canAttack() {
         let currentTime = new Date().getTime();
-        return currentTime - this.lastAttackTime > 3000; // 3 Sekunden Cooldown
+        return currentTime - this.lastAttackTime > 3000;
     }
 
     attack() {
@@ -163,7 +157,7 @@ class Endboss extends MovableObject {
 
         setTimeout(() => {
             this.isAttacking = false;
-        }, 1400); // 7 Frames à 200ms
+        }, 1400);
     }
 
     animate() {
@@ -171,7 +165,7 @@ class Endboss extends MovableObject {
             if (this.isDead && !this.deathAnimationPlayed) {
                 this.playDeathAnimation();
             } else if (this.isDead) {
-                // Animation fertig, Endboss fällt nach unten
+                // Do nothing after death animation is played
             } else if (this.isAttacking) {
                 this.playAnimation(this.IMAGES_ATTACK);
             } else if (this.isHurt()) {
@@ -217,6 +211,6 @@ class Endboss extends MovableObject {
         this.isDead = true;
         this.speed = 0;
         this.currentImage = 0;
-        sounds.endbossDead.play();
+        playSound(sounds.endbossDead);
     }
 }

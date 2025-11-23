@@ -1,6 +1,8 @@
 let canvas;
 let world;
 let keyboard = new Keyboard();
+let soundEnabled = true;
+let gameStarted = false;
 
 let sounds = {
     chickenDead: new Audio("audio/chicken_normal_hurt.wav"),
@@ -16,9 +18,89 @@ let sounds = {
     coinCollect: new Audio("audio/coin_collect.wav"),
     bottleCollect: new Audio("audio/bottle_collect.wav"),
     characterWin: new Audio("audio/character_win.wav"),
+    backgroundMusic: new Audio("audio/background_music.wav"),
 };
 
 sounds.characterSnoring.loop = true;
+sounds.backgroundMusic.loop = true;
+sounds.backgroundMusic.volume = 0.3;
+
+window.playSound = function (sound) {
+    if (soundEnabled && sound) {
+        sound.play().catch((err) => console.log("Audio play prevented:", err));
+    }
+};
+
+document.addEventListener("DOMContentLoaded", () => {
+    initStartScreen();
+});
+
+function initStartScreen() {
+    const startBtn = document.getElementById("start-btn");
+    const infoBtn = document.getElementById("info-btn");
+    const keyboardBtn = document.getElementById("keyboard-btn");
+    const soundBtn = document.getElementById("sound-btn");
+
+    const infoModal = document.getElementById("info-modal");
+    const keyboardModal = document.getElementById("keyboard-modal");
+
+    startBtn.addEventListener("click", () => {
+        startGame();
+    });
+
+    infoBtn.addEventListener("click", () => {
+        infoModal.classList.add("active");
+    });
+
+    keyboardBtn.addEventListener("click", () => {
+        keyboardModal.classList.add("active");
+    });
+
+    soundBtn.addEventListener("click", () => {
+        soundEnabled = !soundEnabled;
+        const iconSvg = soundBtn.querySelector(".icon-sound");
+        if (soundEnabled) {
+            iconSvg.classList.remove("muted");
+        } else {
+            iconSvg.classList.add("muted");
+        }
+        if (gameStarted) {
+            if (soundEnabled) {
+                sounds.backgroundMusic
+                    .play()
+                    .catch((err) => console.log("Audio play prevented:", err));
+            } else {
+                sounds.backgroundMusic.pause();
+            }
+        }
+    });
+
+    document.querySelectorAll(".modal-close").forEach((closeBtn) => {
+        closeBtn.addEventListener("click", (e) => {
+            e.target.closest(".modal").classList.remove("active");
+        });
+    });
+
+    document.querySelectorAll(".modal").forEach((modal) => {
+        modal.addEventListener("click", (e) => {
+            if (e.target === modal) {
+                modal.classList.remove("active");
+            }
+        });
+    });
+}
+
+function startGame() {
+    if (gameStarted) return;
+    gameStarted = true;
+    document.getElementById("start-overlay").style.display = "none";
+    init();
+    if (soundEnabled) {
+        sounds.backgroundMusic
+            .play()
+            .catch((err) => console.log("Audio play prevented:", err));
+    }
+}
 
 function init() {
     canvas = document.getElementById("canvas");

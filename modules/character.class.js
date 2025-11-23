@@ -133,7 +133,7 @@ class Character extends MovableObject {
         setInterval(() => {
             if (this.isDead()) {
                 if (!this.deathSoundPlayed) {
-                    sounds.characterDead.play();
+                    playSound(sounds.characterDead);
                     this.deathSoundPlayed = true;
                 }
                 if (!this.deathAnimationDone) {
@@ -164,7 +164,7 @@ class Character extends MovableObject {
                 if (timeSinceLastAction > 5000) {
                     this.playAnimation(this.IMAGES_LONG_IDLE);
                     if (sounds.characterSnoring.paused) {
-                        sounds.characterSnoring.play();
+                        playSound(sounds.characterSnoring);
                     }
                 } else {
                     this.playAnimation(this.IMAGES_IDLE);
@@ -186,7 +186,7 @@ class Character extends MovableObject {
                 this.jump();
                 this.lastAction = new Date().getTime();
                 sounds.characterJump.currentTime = 0;
-                sounds.characterJump.play();
+                playSound(sounds.characterJump);
             }
         }, 100);
 
@@ -197,7 +197,7 @@ class Character extends MovableObject {
                 !this.isHurt()
             ) {
                 sounds.characterWalking.currentTime = 0;
-                sounds.characterWalking.play();
+                playSound(sounds.characterWalking);
             }
         }, 350);
     }
