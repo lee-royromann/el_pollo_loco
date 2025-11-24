@@ -31,13 +31,13 @@ class SmallChicken extends MovableObject {
 
     animate() {
         setInterval(() => {
-            if (!this.isDead) {
+            if (!world?.isPaused && !this.isDead) {
                 this.moveLeft();
             }
         }, 1000 / 60);
 
         setInterval(() => {
-            if (!this.isDead) {
+            if (!world?.isPaused && !this.isDead) {
                 this.playAnimation(this.IMAGES_WALKING);
             }
         }, 200);

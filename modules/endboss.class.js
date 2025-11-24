@@ -74,7 +74,8 @@ class Endboss extends MovableObject {
 
     checkForActivation() {
         setInterval(() => {
-            if (!this.world || !this.world.character) return;
+            if (!this.world || !this.world.character || this.world.isPaused)
+                return;
 
             let distance = this.x - this.world.character.x;
             if (distance < 500 && !this.isActive && !this.isPlayingAlert) {
@@ -87,20 +88,24 @@ class Endboss extends MovableObject {
         this.isPlayingAlert = true;
         let i = 0;
         let alertInterval = setInterval(() => {
-            if (i < this.IMAGES_ALERT.length) {
-                this.loadImage(this.IMAGES_ALERT[i]);
-                i++;
-            } else {
-                clearInterval(alertInterval);
-                this.isPlayingAlert = false;
-                this.isActive = true;
-                this.startMovement();
+            if (!this.world?.isPaused) {
+                if (i < this.IMAGES_ALERT.length) {
+                    this.loadImage(this.IMAGES_ALERT[i]);
+                    i++;
+                } else {
+                    clearInterval(alertInterval);
+                    this.isPlayingAlert = false;
+                    this.isActive = true;
+                    this.startMovement();
+                }
             }
         }, 200);
     }
 
     startMovement() {
         setInterval(() => {
+            if (this.world?.isPaused) return;
+
             if (
                 this.isActive &&
                 !this.isDead &&
@@ -162,6 +167,8 @@ class Endboss extends MovableObject {
 
     animate() {
         setInterval(() => {
+            if (this.world?.isPaused) return;
+
             if (this.isDead && !this.deathAnimationPlayed) {
                 this.playDeathAnimation();
             } else if (this.isDead) {
@@ -189,7 +196,9 @@ class Endboss extends MovableObject {
 
     startFalling() {
         setInterval(() => {
-            this.y += 10;
+            if (!this.world?.isPaused) {
+                this.y += 10;
+            }
         }, 1000 / 60);
     }
 

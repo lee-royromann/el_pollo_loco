@@ -96,6 +96,10 @@ function initStartScreen() {
     document
         .getElementById("restart-btn-win")
         .addEventListener("click", restartGame);
+    document
+        .getElementById("home-btn-gameover")
+        .addEventListener("click", goToHome);
+    document.getElementById("home-btn-win").addEventListener("click", goToHome);
 }
 
 function startGame() {
@@ -135,6 +139,24 @@ function restartGame() {
     }
 }
 
+function goToHome() {
+    document.getElementById("gameover-overlay").style.display = "none";
+    document.getElementById("win-overlay").style.display = "none";
+
+    if (world) {
+        world.stopGame();
+        world = null;
+    }
+
+    if (sounds.backgroundMusic) {
+        sounds.backgroundMusic.pause();
+        sounds.backgroundMusic.currentTime = 0;
+    }
+
+    gameStarted = false;
+    document.getElementById("start-overlay").style.display = "flex";
+}
+
 window.addEventListener("keydown", (e) => {
     if (e.key == "ArrowLeft") {
         keyboard.LEFT = true;
@@ -150,6 +172,17 @@ window.addEventListener("keydown", (e) => {
     }
     if (e.key == "d" || e.key == "D") {
         keyboard.D = true;
+    }
+    if (
+        (e.key == "Escape" || e.key == "p" || e.key == "P") &&
+        world &&
+        gameStarted
+    ) {
+        if (world.isPaused) {
+            world.resumeGame();
+        } else {
+            world.pauseGame();
+        }
     }
     console.log(keyboard);
 });

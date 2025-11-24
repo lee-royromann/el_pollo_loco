@@ -93,11 +93,31 @@
         </div>
         <div id="gameover-overlay" aria-hidden="true">
             <img src="img/9_intro_outro_screens/game_over/game over.png" alt="Game Over" />
-            <button id="restart-btn-gameover" class="btn-restart">RESTART</button>
+            <div class="overlay-buttons">
+                <button id="home-btn-gameover" class="btn-home" title="Back to Start" aria-label="Back to Start">
+                    <svg class="icon-home" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
+                    </svg>
+                </button>
+                <button id="restart-btn-gameover" class="btn-restart">RESTART</button>
+            </div>
         </div>
         <div id="win-overlay" aria-hidden="true">
             <img src="img/You won, you lost/You Win A.png" alt="You Win" />
-            <button id="restart-btn-win" class="btn-restart">RESTART</button>
+            <div class="overlay-buttons">
+                <button id="home-btn-win" class="btn-home" title="Back to Start" aria-label="Back to Start">
+                    <svg class="icon-home" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
+                    </svg>
+                </button>
+                <button id="restart-btn-win" class="btn-restart">RESTART</button>
+            </div>
+        </div>
+        <div id="pause-overlay" aria-hidden="true">
+            <div class="pause-content">
+                <h2>PAUSED</h2>
+                <p>Press ESC or P to continue</p>
+            </div>
         </div>
     </div>
 </body>

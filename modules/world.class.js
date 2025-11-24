@@ -12,6 +12,7 @@ class World {
     lastSpawnTime = 0;
     gameOverShown = false;
     winShown = false;
+    isPaused = false;
     intervals = [];
     cloudTimeout = null;
 
@@ -28,20 +29,26 @@ class World {
     run() {
         this.intervals.push(
             setInterval(() => {
-                this.checkCollisions();
-                this.checkBottleCollisions();
-                this.checkCoinCollisions();
-                this.checkBottleCollections();
+                if (!this.isPaused) {
+                    this.checkCollisions();
+                    this.checkBottleCollisions();
+                    this.checkCoinCollisions();
+                    this.checkBottleCollections();
+                }
             }, 1000 / 60)
         );
         this.intervals.push(
             setInterval(() => {
-                this.checkThrowObjects();
+                if (!this.isPaused) {
+                    this.checkThrowObjects();
+                }
             }, 120)
         );
         this.intervals.push(
             setInterval(() => {
-                this.checkEnemySpawn();
+                if (!this.isPaused) {
+                    this.checkEnemySpawn();
+                }
             }, 500)
         );
         this.scheduleNextCloudSpawn();
@@ -56,6 +63,34 @@ class World {
         }
         if (this.character) {
             this.character.stopMoving();
+        }
+    }
+
+    pauseGame() {
+        if (this.isPaused || this.gameOverShown || this.winShown) return;
+        this.isPaused = true;
+        document.getElementById("pause-overlay").classList.add("active");
+        if (
+            typeof sounds !== "undefined" &&
+            sounds.backgroundMusic &&
+            !sounds.backgroundMusic.paused
+        ) {
+            sounds.backgroundMusic.pause();
+        }
+    }
+
+    resumeGame() {
+        if (!this.isPaused) return;
+        this.isPaused = false;
+        document.getElementById("pause-overlay").classList.remove("active");
+        if (
+            soundEnabled &&
+            typeof sounds !== "undefined" &&
+            sounds.backgroundMusic
+        ) {
+            sounds.backgroundMusic
+                .play()
+                .catch((err) => console.log("Audio play prevented:", err));
         }
     }
 
