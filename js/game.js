@@ -7,7 +7,8 @@ let gameStarted = false;
 let sounds = {
     chickenDead: new Audio("audio/chicken_normal_hurt.wav"),
     smallChickenDead: new Audio("audio/chicken_small_hurt.wav"),
-    endbossDead: new Audio("audio/chicken_endboss_hurt.wav"),
+    endbossHurt: new Audio("audio/chicken_endboss_hurt.wav"),
+    endbossDead: new Audio("audio/chicken_endboss_dead.wav"),
     characterHurt: new Audio("audio/character_hurt.wav"),
     characterDead: new Audio("audio/character_dead.wav"),
     bottleBreaks: new Audio("audio/bottle_breaks.wav"),
@@ -34,6 +35,9 @@ window.playSound = function (sound) {
 window.addEventListener("load", () => {
     document.getElementById("loading-overlay").classList.add("hidden");
     initStartScreen();
+    initResponsive();
+    initTouchControls();
+    initFullscreenButton();
 });
 
 function initStartScreen() {
@@ -41,7 +45,6 @@ function initStartScreen() {
     const infoBtn = document.getElementById("info-btn");
     const keyboardBtn = document.getElementById("keyboard-btn");
     const soundBtn = document.getElementById("sound-btn");
-
     const infoModal = document.getElementById("info-modal");
     const keyboardModal = document.getElementById("keyboard-modal");
 
@@ -168,6 +171,7 @@ window.addEventListener("keydown", (e) => {
         keyboard.UP = true;
     }
     if (e.key == " ") {
+        e.preventDefault();
         keyboard.SPACE = true;
     }
     if (e.key == "d" || e.key == "D") {
@@ -205,3 +209,68 @@ window.addEventListener("keyup", (e) => {
     }
     console.log(keyboard);
 });
+
+function initResponsive() {
+    resizeGame();
+    window.addEventListener("resize", resizeGame);
+    window.addEventListener("orientationchange", resizeGame);
+}
+
+function resizeGame() {
+    const wrapper = document.getElementById("game-wrapper");
+    const container = document.getElementById("game-container");
+    if (!wrapper || !container) return;
+
+    const scale = Math.min(
+        window.innerWidth / 720,
+        window.innerHeight / 480,
+        document.fullscreenElement ? 999 : 1
+    );
+    container.style.transform = `scale(${scale})`;
+    wrapper.style.width = `${720 * scale}px`;
+    wrapper.style.height = `${480 * scale}px`;
+}
+
+function initTouchControls() {
+    const buttons = {
+        "btn-left": "LEFT",
+        "btn-right": "RIGHT",
+        "btn-jump": "SPACE",
+        "btn-throw": "D",
+    };
+
+    for (let id in buttons) {
+        const btn = document.getElementById(id);
+        if (btn) {
+            btn.addEventListener("touchstart", (e) => {
+                e.preventDefault();
+                keyboard[buttons[id]] = true;
+            });
+            btn.addEventListener("touchend", (e) => {
+                e.preventDefault();
+                keyboard[buttons[id]] = false;
+            });
+        }
+    }
+}
+
+function initFullscreenButton() {
+    const btn = document.getElementById("fullscreen-btn");
+    if (!btn) return;
+
+    btn.addEventListener("click", () => {
+        if (document.fullscreenElement) {
+            document.exitFullscreen();
+        } else {
+            document.documentElement.requestFullscreen();
+        }
+    });
+
+    document.addEventListener("fullscreenchange", () => {
+        document.body.classList.toggle(
+            "fullscreen-mode",
+            !!document.fullscreenElement
+        );
+        resizeGame();
+    });
+}

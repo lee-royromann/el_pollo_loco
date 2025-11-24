@@ -211,6 +211,7 @@ class Endboss extends MovableObject {
     hit() {
         this.energy--;
         this.lastHit = new Date().getTime();
+        playSound(sounds.endbossHurt);
         if (this.energy <= 0) {
             this.kill();
         }

@@ -6,11 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>El Pollo Loco</title>
     <link rel="icon" type="image/png" href="img/11_favicon/favicon.png">
-
-    <!-- CSS -->
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/overlays.css">
+    <link rel="stylesheet" href="css/buttons.css">
+    <link rel="stylesheet" href="css/modals.css">
+    <link rel="stylesheet" href="css/touch-controls.css">
+    <link rel="stylesheet" href="css/fullscreen.css">
+    <link rel="stylesheet" href="css/mediaqueries.css">
 
-    <!-- JS -->
     <script src="modules/drawable-object.class.js" defer></script>
     <script src="modules/movable-object.class.js" defer></script>
     <script src="modules/character.class.js" defer></script>
@@ -31,95 +34,148 @@
 </head>
 
 <body>
-
     <div id="loading-overlay">
         <div class="spinner"></div>
         <p>Loading...</p>
     </div>
 
-    <h1>El Pollo Loco</h1>
+    <h1 translate="no">El Pollo Loco</h1>
 
-    <div id="game-container">
-        <canvas id="canvas" width="720" height="480"></canvas>
-        <div id="start-overlay">
-            <img src="img/9_intro_outro_screens/start/startscreen_1.png" alt="El Pollo Loco Start Screen"
-                class="start-bg" />
-            <div class="start-buttons">
-                <button id="start-btn" class="btn-start">START</button>
-                <div class="icon-buttons">
-                    <button id="info-btn" class="btn-icon" title="Game Info" aria-label="Game Info">
-                        <span class="icon-info">i</span>
-                    </button>
-                    <button id="keyboard-btn" class="btn-icon" title="Controls" aria-label="Controls">
-                        <svg class="icon-keyboard" viewBox="0 0 24 24" fill="currentColor">
-                            <rect x="2" y="6" width="20" height="12" rx="2" stroke="currentColor" stroke-width="1.5"
-                                fill="none" />
-                            <line x1="5" y1="10" x2="7" y2="10" stroke="currentColor" stroke-width="1.5" />
-                            <line x1="9" y1="10" x2="11" y2="10" stroke="currentColor" stroke-width="1.5" />
-                            <line x1="13" y1="10" x2="15" y2="10" stroke="currentColor" stroke-width="1.5" />
-                            <line x1="17" y1="10" x2="19" y2="10" stroke="currentColor" stroke-width="1.5" />
-                            <line x1="7" y1="14" x2="17" y2="14" stroke="currentColor" stroke-width="1.5" />
+    <div id="rotate-overlay">
+        <div class="rotate-content">
+            <img src="img/11_favicon/favicon.png" alt="El Pollo Loco" class="rotate-logo">
+            <p>Drehe dein Gerät ins Querformat</p>
+        </div>
+    </div>
+
+    <div id="game-wrapper">
+        <div id="game-container">
+            <canvas id="canvas" width="720" height="480"></canvas>
+
+            <div id="touch-controls">
+                <div class="touch-left">
+                    <button class="touch-btn" id="btn-left">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
                         </svg>
                     </button>
-                    <button id="sound-btn" class="btn-icon" title="Toggle Sound" aria-label="Toggle Sound">
-                        <svg class="icon-sound" viewBox="0 0 24 24" fill="currentColor">
-                            <path
-                                d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"
-                                fill="currentColor" />
+                    <button class="touch-btn" id="btn-right">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" />
                         </svg>
                     </button>
                 </div>
+                <div class="touch-right">
+                    <button class="touch-btn" id="btn-jump">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M7 14l5-5 5 5z" />
+                        </svg>
+                    </button>
+                    <button class="touch-btn" id="btn-throw">D</button>
+                </div>
             </div>
-        </div>
-        <div id="info-modal" class="modal" aria-hidden="true">
-            <div class="modal-content">
-                <button class="modal-close" aria-label="Close">&times;</button>
-                <h2>About El Pollo Loco</h2>
-                <p>A classic jump & run game where you help Pepe defeat the evil chicken boss!</p>
-                <p><strong>Developer:</strong> Lee-Roy Romann</p>
-                <p><a href="#" target="_blank">Impressum</a></p>
+            <div id="start-overlay">
+                <img src="img/9_intro_outro_screens/start/startscreen_1.png" alt="El Pollo Loco Start Screen"
+                    class="start-bg">
+                <div class="start-buttons">
+                    <button id="start-btn" class="btn-start">START</button>
+                    <div class="icon-buttons">
+                        <button id="info-btn" class="btn-icon" title="Game Info">
+                            <span class="icon-info">i</span>
+                        </button>
+                        <button id="keyboard-btn" class="btn-icon" title="Controls">
+                            <svg class="icon-keyboard" viewBox="0 0 24 24" fill="currentColor">
+                                <rect x="2" y="6" width="20" height="12" rx="2" stroke="currentColor" stroke-width="1.5"
+                                    fill="none" />
+                                <line x1="5" y1="10" x2="7" y2="10" stroke="currentColor" stroke-width="1.5" />
+                                <line x1="9" y1="10" x2="11" y2="10" stroke="currentColor" stroke-width="1.5" />
+                                <line x1="13" y1="10" x2="15" y2="10" stroke="currentColor" stroke-width="1.5" />
+                                <line x1="17" y1="10" x2="19" y2="10" stroke="currentColor" stroke-width="1.5" />
+                                <line x1="7" y1="14" x2="17" y2="14" stroke="currentColor" stroke-width="1.5" />
+                            </svg>
+                        </button>
+                        <button id="sound-btn" class="btn-icon" title="Toggle Sound">
+                            <svg class="icon-sound" viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
             </div>
-        </div>
-        <div id="keyboard-modal" class="modal" aria-hidden="true">
-            <div class="modal-content">
-                <button class="modal-close" aria-label="Close">&times;</button>
-                <h2>Game Controls</h2>
-                <ul class="controls-list">
-                    <li><strong>←/→</strong> Move left/right</li>
-                    <li><strong>↑ / Space</strong> Jump</li>
-                    <li><strong>D</strong> Throw bottle</li>
-                </ul>
+            <div id="info-modal" class="modal">
+                <div class="modal-content">
+                    <button class="modal-close">&times;</button>
+                    <h2>About El Pollo Loco</h2>
+                    <p>A classic jump & run game where you help Pepe defeat the evil chicken boss!</p>
+                    <p><strong>Developer:</strong> Lee-Roy Romann</p>
+                    <p><a href="#" target="_blank">Impressum</a></p>
+                </div>
             </div>
-        </div>
-        <div id="gameover-overlay" aria-hidden="true">
-            <img src="img/9_intro_outro_screens/game_over/game over.png" alt="Game Over" />
-            <div class="overlay-buttons">
-                <button id="home-btn-gameover" class="btn-home" title="Back to Start" aria-label="Back to Start">
-                    <svg class="icon-home" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
-                    </svg>
-                </button>
-                <button id="restart-btn-gameover" class="btn-restart">RESTART</button>
+            <div id="keyboard-modal" class="modal">
+                <div class="modal-content">
+                    <button class="modal-close">&times;</button>
+                    <h2>Game Controls</h2>
+                    <div class="controls-list">
+                        <div class="control-item">
+                            <span class="control-key">←</span>
+                            <span class="control-label">Move Left</span>
+                        </div>
+                        <div class="control-item">
+                            <span class="control-key">→</span>
+                            <span class="control-label">Move Right</span>
+                        </div>
+                        <div class="control-item">
+                            <span class="control-key">Space</span>
+                            <span class="control-label">Jump</span>
+                        </div>
+                        <div class="control-item">
+                            <span class="control-key">D</span>
+                            <span class="control-label">Throw Bottle</span>
+                        </div>
+                        <div class="control-item">
+                            <span class="control-key">P / ESC</span>
+                            <span class="control-label">Pause</span>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
-        <div id="win-overlay" aria-hidden="true">
-            <img src="img/You won, you lost/You Win A.png" alt="You Win" />
-            <div class="overlay-buttons">
-                <button id="home-btn-win" class="btn-home" title="Back to Start" aria-label="Back to Start">
-                    <svg class="icon-home" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
-                    </svg>
-                </button>
-                <button id="restart-btn-win" class="btn-restart">RESTART</button>
+            <div id="gameover-overlay">
+                <img src="img/9_intro_outro_screens/game_over/game over.png" alt="Game Over">
+                <div class="overlay-buttons">
+                    <button id="home-btn-gameover" class="btn-home" title="Back to Start">
+                        <svg class="icon-home" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
+                        </svg>
+                    </button>
+                    <button id="restart-btn-gameover" class="btn-restart">RESTART</button>
+                </div>
             </div>
-        </div>
-        <div id="pause-overlay" aria-hidden="true">
-            <div class="pause-content">
-                <h2>PAUSED</h2>
-                <p>Press ESC or P to continue</p>
+            <div id="win-overlay">
+                <img src="img/You won, you lost/You Win A.png" alt="You Win">
+                <div class="overlay-buttons">
+                    <button id="home-btn-win" class="btn-home" title="Back to Start">
+                        <svg class="icon-home" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
+                        </svg>
+                    </button>
+                    <button id="restart-btn-win" class="btn-restart">RESTART</button>
+                </div>
+            </div>
+            <div id="pause-overlay">
+                <div class="pause-content">
+                    <h2>PAUSED</h2>
+                    <p>Press ESC or P to continue</p>
+                </div>
             </div>
         </div>
     </div>
+
+    <button id="fullscreen-btn" class="btn-fullscreen" title="Fullscreen">
+        <svg class="icon-fullscreen" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z" />
+        </svg>
+    </button>
 </body>
 
 </html>

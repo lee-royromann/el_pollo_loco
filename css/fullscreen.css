@@ -1,0 +1,28 @@
+body.fullscreen-mode {
+    background: #000;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    min-height: 100vh;
+}
+
+body.fullscreen-mode h1 {
+    display: none;
+}
+
+body.fullscreen-mode #game-wrapper {
+    width: 100vw !important;
+    height: 100vh !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+body.fullscreen-mode #game-container {
+    box-shadow: none;
+    margin-top: 0;
+    width: 720px;
+    height: 480px;
+}

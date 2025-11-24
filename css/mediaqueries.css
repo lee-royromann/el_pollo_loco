@@ -1,0 +1,190 @@
+@media (hover: hover) {
+    #touch-controls {
+        display: none;
+    }
+    #rotate-overlay {
+        display: none;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 1024px) and (hover: none) {
+    h1 {
+        font-size: 64px;
+        top: calc(50% - 240px - 80px);
+    }
+
+    #touch-controls {
+        display: block;
+    }
+
+    .touch-btn {
+        width: 65px;
+        height: 65px;
+    }
+
+    .btn-fullscreen {
+        width: 55px;
+        height: 55px;
+        bottom: 25px;
+        right: 25px;
+    }
+}
+
+@media (max-width: 1024px) and (orientation: portrait) {
+    #rotate-overlay {
+        display: flex;
+    }
+
+    #game-wrapper,
+    h1,
+    .btn-fullscreen {
+        display: none;
+    }
+}
+
+@media (max-width: 1024px) and (orientation: landscape) {
+    body {
+        padding: 0;
+        background: #000;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        min-height: 100vh;
+    }
+
+    h1 {
+        display: none;
+    }
+
+    #game-wrapper {
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    #game-container {
+        box-shadow: none;
+        margin-top: 0;
+    }
+
+    #touch-controls {
+        display: block;
+    }
+
+    .touch-left,
+    .touch-right {
+        bottom: 15px;
+        gap: 10px;
+    }
+
+    .touch-left {
+        left: 15px;
+    }
+
+    .touch-right {
+        right: 15px;
+    }
+
+    .touch-btn {
+        width: 60px;
+        height: 60px;
+    }
+
+    .touch-btn svg {
+        width: 28px;
+        height: 28px;
+    }
+
+    .btn-fullscreen {
+        display: flex;
+        width: 50px;
+        height: 50px;
+        bottom: 20px;
+        right: 20px;
+        z-index: 50;
+    }
+
+    #start-overlay {
+        padding: 20px 25px;
+    }
+
+    .btn-start {
+        padding: 10px 35px;
+        font-size: 26px;
+        letter-spacing: 2px;
+    }
+
+    .btn-icon {
+        width: 45px;
+        height: 45px;
+    }
+
+    .icon-buttons {
+        gap: 10px;
+    }
+
+    .modal-content {
+        width: 90%;
+        max-width: 90%;
+        padding: 25px 30px;
+    }
+
+    .modal h2 {
+        font-size: 24px;
+    }
+
+    .overlay-buttons {
+        bottom: 25px;
+        gap: 15px;
+    }
+
+    .btn-restart {
+        padding: 10px 35px;
+        font-size: 26px;
+    }
+
+    .btn-home {
+        width: 45px;
+        height: 45px;
+    }
+
+    .pause-content h2 {
+        font-size: 48px;
+        letter-spacing: 5px;
+    }
+
+    .pause-content p {
+        font-size: 18px;
+    }
+}
+
+@media (max-width: 896px) and (orientation: landscape) {
+    .touch-btn {
+        width: 55px;
+        height: 55px;
+    }
+
+    .touch-btn svg {
+        width: 24px;
+        height: 24px;
+    }
+
+    .touch-left,
+    .touch-right {
+        bottom: 10px;
+    }
+
+    .btn-start {
+        padding: 8px 30px;
+        font-size: 22px;
+    }
+
+    .btn-icon {
+        width: 40px;
+        height: 40px;
+    }
+}
