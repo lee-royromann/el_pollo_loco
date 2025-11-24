@@ -90,7 +90,7 @@ class World {
         ) {
             sounds.backgroundMusic
                 .play()
-                .catch((err) => console.log("Audio play prevented:", err));
+                .catch(() => {});
         }
     }
 

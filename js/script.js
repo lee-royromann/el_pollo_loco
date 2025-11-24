@@ -70,7 +70,9 @@ function initStartScreen() {
         }
         if (gameStarted) {
             if (soundEnabled) {
-                sounds.backgroundMusic.play().catch(() => {});
+                sounds.backgroundMusic
+                    .play()
+                    .catch(() => {});
             } else {
                 sounds.backgroundMusic.pause();
             }
@@ -109,7 +111,9 @@ function startGame() {
     document.getElementById("start-overlay").style.display = "none";
     init();
     if (soundEnabled) {
-        sounds.backgroundMusic.play().catch(() => {});
+        sounds.backgroundMusic
+            .play()
+            .catch(() => {});
     }
 }
 
@@ -132,7 +136,9 @@ function restartGame() {
 
     if (soundEnabled) {
         sounds.backgroundMusic.currentTime = 0;
-        sounds.backgroundMusic.play().catch(() => {});
+        sounds.backgroundMusic
+            .play()
+            .catch(() => {});
     }
 }
 
