@@ -3,6 +3,39 @@ body {
     height: 100%;
 }
 
+/* Loading Overlay */
+#loading-overlay {
+    position: fixed;
+    inset: 0;
+    background: #1a1a1a;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    color: #fff;
+}
+
+#loading-overlay .spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid #444;
+    border-top-color: #ff9800;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin-bottom: 20px;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+#loading-overlay.hidden {
+    display: none;
+}
+
 body {
     display: flex;
     flex-direction: column;
@@ -290,4 +323,34 @@ svg.icon-sound.muted path {
     max-height: 100%;
     object-fit: contain;
     image-rendering: auto;
+}
+
+.btn-restart {
+    position: absolute;
+    bottom: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 15px 40px;
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: #fff;
+    background: linear-gradient(135deg, #ff6b35 0%, #ff4500 100%);
+    border: 3px solid #fff;
+    border-radius: 12px;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+    transition: all 0.2s ease;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    letter-spacing: 2px;
+}
+
+.btn-restart:hover {
+    transform: translateX(-50%) translateY(-3px);
+    box-shadow: 0 8px 25px rgba(255, 107, 53, 0.5);
+    background: linear-gradient(135deg, #ff7f50 0%, #ff5722 100%);
+}
+
+.btn-restart:active {
+    transform: translateX(-50%) translateY(-1px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 }

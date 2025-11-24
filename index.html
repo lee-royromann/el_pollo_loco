@@ -32,6 +32,11 @@
 
 <body>
 
+    <div id="loading-overlay">
+        <div class="spinner"></div>
+        <p>Loading...</p>
+    </div>
+
     <h1>El Pollo Loco</h1>
 
     <div id="game-container">
@@ -88,9 +93,11 @@
         </div>
         <div id="gameover-overlay" aria-hidden="true">
             <img src="img/9_intro_outro_screens/game_over/game over.png" alt="Game Over" />
+            <button id="restart-btn-gameover" class="btn-restart">RESTART</button>
         </div>
         <div id="win-overlay" aria-hidden="true">
             <img src="img/You won, you lost/You Win A.png" alt="You Win" />
+            <button id="restart-btn-win" class="btn-restart">RESTART</button>
         </div>
     </div>
 </body>

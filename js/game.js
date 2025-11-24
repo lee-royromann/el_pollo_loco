@@ -31,7 +31,8 @@ window.playSound = function (sound) {
     }
 };
 
-document.addEventListener("DOMContentLoaded", () => {
+window.addEventListener("load", () => {
+    document.getElementById("loading-overlay").classList.add("hidden");
     initStartScreen();
 });
 
@@ -88,6 +89,13 @@ function initStartScreen() {
             }
         });
     });
+
+    document
+        .getElementById("restart-btn-gameover")
+        .addEventListener("click", restartGame);
+    document
+        .getElementById("restart-btn-win")
+        .addEventListener("click", restartGame);
 }
 
 function startGame() {
@@ -103,9 +111,28 @@ function startGame() {
 }
 
 function init() {
-    canvas = document.getElementById("canvas");
+    if (!canvas) {
+        canvas = document.getElementById("canvas");
+    }
     world = new World(canvas, keyboard);
-    ctx = canvas.getContext("2d");
+}
+
+function restartGame() {
+    document.getElementById("gameover-overlay").style.display = "none";
+    document.getElementById("win-overlay").style.display = "none";
+
+    if (world) {
+        world.stopGame();
+    }
+
+    world = new World(canvas, keyboard);
+
+    if (soundEnabled) {
+        sounds.backgroundMusic.currentTime = 0;
+        sounds.backgroundMusic
+            .play()
+            .catch((err) => console.log("Audio play prevented:", err));
+    }
 }
 
 window.addEventListener("keydown", (e) => {

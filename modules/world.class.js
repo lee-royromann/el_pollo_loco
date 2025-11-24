@@ -1,6 +1,6 @@
 class World {
     character = new Character();
-    level = level1;
+    level = createLevel1();
     camera_x = 0;
     backgroundCache = {};
     statusBar = new StatusBar();
@@ -12,36 +12,56 @@ class World {
     lastSpawnTime = 0;
     gameOverShown = false;
     winShown = false;
+    intervals = [];
+    cloudTimeout = null;
 
     constructor(canvas, keyboard) {
         this.canvas = canvas;
         this.ctx = canvas.getContext("2d");
         this.keyboard = keyboard;
-        this.lastSpawnTime = new Date().getTime(); // Starte mit aktuellem Timestamp
+        this.lastSpawnTime = new Date().getTime(); // Start with current timestamp
         this.draw();
         this.setWorld();
         this.run();
     }
 
     run() {
-        setInterval(() => {
-            this.checkCollisions();
-            this.checkBottleCollisions();
-            this.checkCoinCollisions();
-            this.checkBottleCollections();
-        }, 1000 / 60);
-        setInterval(() => {
-            this.checkThrowObjects();
-        }, 120);
-        setInterval(() => {
-            this.checkEnemySpawn();
-        }, 500);
+        this.intervals.push(
+            setInterval(() => {
+                this.checkCollisions();
+                this.checkBottleCollisions();
+                this.checkCoinCollisions();
+                this.checkBottleCollections();
+            }, 1000 / 60)
+        );
+        this.intervals.push(
+            setInterval(() => {
+                this.checkThrowObjects();
+            }, 120)
+        );
+        this.intervals.push(
+            setInterval(() => {
+                this.checkEnemySpawn();
+            }, 500)
+        );
         this.scheduleNextCloudSpawn();
     }
 
+    stopGame() {
+        this.intervals.forEach((interval) => clearInterval(interval));
+        this.intervals = [];
+        if (this.cloudTimeout) {
+            clearTimeout(this.cloudTimeout);
+            this.cloudTimeout = null;
+        }
+        if (this.character) {
+            this.character.stopMoving();
+        }
+    }
+
     scheduleNextCloudSpawn() {
-        const randomDelay = 10000 + Math.random() * 20000; // 5-25 Sekunden
-        setTimeout(() => {
+        const randomDelay = 10000 + Math.random() * 20000; // 5-25 seconds
+        this.cloudTimeout = setTimeout(() => {
             this.spawnCloud();
             this.scheduleNextCloudSpawn();
         }, randomDelay);
@@ -355,6 +375,7 @@ class World {
             if (!this.gameOverShown) {
                 overlay.style.display = "flex";
                 this.gameOverShown = true;
+                this.stopGame();
                 if (typeof sounds !== "undefined" && sounds.backgroundMusic) {
                     sounds.backgroundMusic.pause();
                     sounds.backgroundMusic.currentTime = 0;
@@ -374,6 +395,7 @@ class World {
             if (!this.winShown) {
                 overlay.style.display = "flex";
                 this.winShown = true;
+                this.stopGame();
                 sounds.characterWin.currentTime = 0;
                 playSound(sounds.characterWin);
                 if (typeof sounds !== "undefined" && sounds.backgroundMusic) {
