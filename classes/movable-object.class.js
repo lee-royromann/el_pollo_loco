@@ -47,21 +47,8 @@ class MovableObject extends DrawableObject {
         this.currentImage++;
     }
 
-    isColliding(movableObject) {
-        return (
-            this.x + this.width - this.offset.right >
-                movableObject.x + movableObject.offset.left &&
-            this.y + this.height - this.offset.bottom >
-                movableObject.y + movableObject.offset.top &&
-            this.x + this.offset.left <
-                movableObject.x +
-                    movableObject.width -
-                    movableObject.offset.right &&
-            this.y + this.offset.top <
-                movableObject.y +
-                    movableObject.height -
-                    movableObject.offset.bottom
-        );
+    isColliding(obj) {
+        return this.isCollidingHorizontally(obj) && this.isCollidingVertically(obj);
     }
 
     hit() {
@@ -75,12 +62,22 @@ class MovableObject extends DrawableObject {
     }
 
     isHurt() {
-        let timePassed = new Date().getTime() - this.lastHit; // How long ago was the last hit?
+        let timePassed = new Date().getTime() - this.lastHit;
         timePassed = timePassed / 1000;
         return timePassed < 0.5;
     }
 
     isDead() {
         return this.energy == 0;
+    }
+
+    isCollidingHorizontally(obj) {
+        return this.x + this.width - this.offset.right > obj.x + obj.offset.left &&
+               this.x + this.offset.left < obj.x + obj.width - obj.offset.right;
+    }
+
+    isCollidingVertically(obj) {
+        return this.y + this.height - this.offset.bottom > obj.y + obj.offset.top &&
+               this.y + this.offset.top < obj.y + obj.height - obj.offset.bottom;
     }
 }
