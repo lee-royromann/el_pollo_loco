@@ -108,7 +108,7 @@ class Character extends MovableObject {
     startJumpAnimation() {
         this.intervals.push(
             setInterval(() => {
-                if (this.world.isPaused) return;
+                if (this.world && this.world.isPaused) return;
                 if (this.isAboveGround() && this.jumpAnimationIndex < this.IMAGES_JUMPING.length) {
                     this.setJumpFrame(this.jumpAnimationIndex);
                     this.jumpAnimationIndex++;
@@ -124,7 +124,7 @@ class Character extends MovableObject {
     startMovementControl() {
         this.intervals.push(
             setInterval(() => {
-                if (this.world.isPaused) return;
+                if (!this.world || this.world.isPaused) return;
                 if (this.canMoveRight()) {
                     this.moveRight();
                     this.otherDirection = false;
@@ -142,7 +142,7 @@ class Character extends MovableObject {
     startAnimationControl() {
         this.intervals.push(
             setInterval(() => {
-                if (this.world.isPaused) return;
+                if (this.world && this.world.isPaused) return;
                 if (this.isDead()) this.handleDeathAnimation();
                 else if (this.isHurt()) this.playAnimation(this.IMAGES_HURT);
                 else if (this.isWalking())
@@ -154,7 +154,7 @@ class Character extends MovableObject {
     startIdleAnimation() {
         this.intervals.push(
             setInterval(() => {
-                if (this.world.isPaused) return;
+                if (this.world && this.world.isPaused) return;
                 if (this.shouldBeIdle()) {
                     this.isLongIdle() ? this.playLongIdle() : this.playShortIdle();
                 } else {
@@ -167,7 +167,7 @@ class Character extends MovableObject {
     startJumpControl() {
         this.intervals.push(
             setInterval(() => {
-                if (this.world.isPaused) return;
+                if (this.world && this.world.isPaused) return;
                 if (this.canJump()) {
                     this.jump();
                     this.updateLastAction();
@@ -180,7 +180,7 @@ class Character extends MovableObject {
     startWalkingSoundControl() {
         this.intervals.push(
             setInterval(() => {
-                if (this.world.isPaused) return;
+                if (this.world && this.world.isPaused) return;
                 if (this.shouldPlayWalkingSound()) {
                     sounds.characterWalking.currentTime = 0;
                     playSound(sounds.characterWalking);
@@ -190,19 +190,20 @@ class Character extends MovableObject {
     }
 
     canMoveRight() {
-        return (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x);
+        return (this.world && this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x);
     }
 
     canMoveLeft() {
-        return this.world.keyboard.LEFT && this.x > 0;
+        return this.world && this.world.keyboard.LEFT && this.x > 0;
     }
 
     isWalking() {
-        return ((this.world.keyboard.RIGHT || this.world.keyboard.LEFT) && !this.isAboveGround() && this.jumpAnimationIndex === 0);
+        return (this.world && (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) && !this.isAboveGround() && this.jumpAnimationIndex === 0);
     }
 
     shouldBeIdle() {
         return (
+            this.world &&
             !this.isDead() &&
             !this.isHurt() &&
             !this.world.keyboard.RIGHT &&
@@ -217,11 +218,11 @@ class Character extends MovableObject {
     }
 
     canJump() {
-        return this.world.keyboard.SPACE && !this.isAboveGround();
+        return this.world && this.world.keyboard.SPACE && !this.isAboveGround();
     }
 
     shouldPlayWalkingSound() {
-        return ((this.world.keyboard.RIGHT || this.world.keyboard.LEFT) &&!this.isAboveGround() &&!this.isHurt());
+        return (this.world && (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) &&!this.isAboveGround() &&!this.isHurt());
     }
 
     setJumpFrame(index) {
