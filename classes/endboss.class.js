@@ -74,11 +74,9 @@ class Endboss extends MovableObject {
 
     checkForActivation() {
         setInterval(() => {
-            if (!this.world || !this.world.character || this.world.isPaused)
-                return;
-
+            if (!this.world || !this.world.character || this.world.isPaused) return;
             let distance = this.x - this.world.character.x;
-            if (distance < 500 && !this.isActive && !this.isPlayingAlert) {
+            if (this.isCloseEnoughToActivate(distance)) {
                 this.playAlertAnimation();
             }
         }, 100);
@@ -94,9 +92,7 @@ class Endboss extends MovableObject {
                     i++;
                 } else {
                     clearInterval(alertInterval);
-                    this.isPlayingAlert = false;
-                    this.isActive = true;
-                    this.startMovement();
+                    this.startBossFight();
                 }
             }
         }, 200);
@@ -105,47 +101,18 @@ class Endboss extends MovableObject {
     startMovement() {
         setInterval(() => {
             if (this.world?.isPaused) return;
-
-            if (
-                this.isActive &&
-                !this.isDead &&
-                this.world &&
-                this.world.character
-            ) {
+            if (this.isActive && !this.isDead && this.world && this.world.character) {
                 let distance = this.x - this.world.character.x;
                 let absDistance = Math.abs(distance);
-
+                
                 if (this.isAttacking) {
-                    if (distance > 20) {
-                        this.x -= 4;
-                        this.otherDirection = false;
-                    } else if (distance < -20) {
-                        this.x += 4;
-                        this.otherDirection = true;
-                    }
+                    this.moveTowardsPlayer(distance);
                 } else if (absDistance < 250 && this.canAttack()) {
-                    if (distance > 0) {
-                        this.otherDirection = false;
-                    } else {
-                        this.otherDirection = true;
-                    }
-                    this.attack();
+                    this.turnToPlayerAndAttack(distance);
                 } else if (absDistance < 250 && !this.canAttack()) {
-                    if (distance > 30) {
-                        this.x += 0.8;
-                        this.otherDirection = false;
-                    } else if (distance < -30) {
-                        this.x -= 0.8;
-                        this.otherDirection = true;
-                    }
+                    this.backAwayFromPlayer(distance);
                 } else if (absDistance >= 250) {
-                    if (distance > 0) {
-                        this.moveLeft();
-                        this.otherDirection = false;
-                    } else {
-                        this.moveRight();
-                        this.otherDirection = true;
-                    }
+                    this.moveTowardsPlayer(distance);
                 }
             }
         }, 1000 / 60);
@@ -168,17 +135,16 @@ class Endboss extends MovableObject {
     animate() {
         setInterval(() => {
             if (this.world?.isPaused) return;
-
             if (this.isDead && !this.deathAnimationPlayed) {
                 this.playDeathAnimation();
-            } else if (this.isDead) {
-                // Do nothing after death animation is played
-            } else if (this.isAttacking) {
-                this.playAnimation(this.IMAGES_ATTACK);
-            } else if (this.isHurt()) {
-                this.playAnimation(this.IMAGES_HURT);
-            } else if (this.isActive && !this.isPlayingAlert) {
-                this.playAnimation(this.IMAGES_WALKING);
+            } else if (!this.isDead) {
+                if (this.isAttacking) {
+                    this.playAnimation(this.IMAGES_ATTACK);
+                } else if (this.isHurt()) {
+                    this.playAnimation(this.IMAGES_HURT);
+                } else if (this.isActive && !this.isPlayingAlert) {
+                    this.playAnimation(this.IMAGES_WALKING);
+                }
             }
         }, 200);
     }
@@ -222,5 +188,40 @@ class Endboss extends MovableObject {
         this.speed = 0;
         this.currentImage = 0;
         playSound(sounds.endbossDead);
+    }
+
+    isCloseEnoughToActivate(distance) {
+        return distance < 500 && !this.isActive && !this.isPlayingAlert;
+    }
+
+    startBossFight() {
+        this.isPlayingAlert = false;
+        this.isActive = true;
+        this.startMovement();
+    }
+
+    moveTowardsPlayer(distance) {
+        if (distance > 20) {
+            this.x -= 4;
+            this.otherDirection = false;
+        } else if (distance < -20) {
+            this.x += 4;
+            this.otherDirection = true;
+        }
+    }
+
+    turnToPlayerAndAttack(distance) {
+        this.otherDirection = distance <= 0;
+        this.attack();
+    }
+
+    backAwayFromPlayer(distance) {
+        if (distance > 30) {
+            this.x += 0.8;
+            this.otherDirection = false;
+        } else if (distance < -30) {
+            this.x -= 0.8;
+            this.otherDirection = true;
+        }
     }
 }
