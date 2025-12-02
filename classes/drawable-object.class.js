@@ -1,3 +1,6 @@
+/**
+ * Base class for objects that can be drawn on canvas.
+ */
 class DrawableObject {
     img;
     imageCache = {};
@@ -7,11 +10,19 @@ class DrawableObject {
     height = 150;
     width = 100;
 
+    /**
+     * Loads a single image from the given path.
+     * @param {string} path - Path to the image file.
+     */
     loadImage(path) {
         this.img = new Image();
         this.img.src = path;
     }
 
+    /**
+     * Draws the object on the canvas.
+     * @param {CanvasRenderingContext2D} ctx - The canvas rendering context.
+     */
     draw(ctx) {
         try {
             if (this.img && this.img.complete && this.img.naturalHeight > 0) {
@@ -24,10 +35,14 @@ class DrawableObject {
                 );
             }
         } catch (e) {
-            // Bild noch nicht geladen - überspringen
+            // Picture not loaded yet, do nothing.
         }
     }
 
+    /**
+     * Draws a debug frame around the object (for collision debugging).
+     * @param {CanvasRenderingContext2D} ctx - The canvas rendering context.
+     */
     drawFrame(ctx) {
         if (
             this instanceof Character ||
@@ -53,6 +68,10 @@ class DrawableObject {
         }
     }
 
+    /**
+     * Loads multiple images and stores them in the image cache.
+     * @param {string[]} arr - Array of image paths to load.
+     */
     loadImages(arr) {
         arr.forEach((path) => {
             let img = new Image();
