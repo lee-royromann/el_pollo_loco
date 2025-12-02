@@ -1,7 +1,7 @@
 let canvas;
 let world;
 let keyboard = new Keyboard();
-let soundEnabled = true;
+let soundEnabled = localStorage.getItem("soundEnabled") !== "false";
 let gameStarted = false;
 
 let sounds = {
@@ -48,6 +48,10 @@ function initStartScreen() {
     const infoModal = document.getElementById("info-modal");
     const keyboardModal = document.getElementById("keyboard-modal");
 
+    if (!soundEnabled) {
+        soundBtn.querySelector(".icon-sound").classList.add("muted");
+    }
+
     startBtn.addEventListener("click", () => {
         startGame();
     });
@@ -62,6 +66,7 @@ function initStartScreen() {
 
     soundBtn.addEventListener("click", () => {
         soundEnabled = !soundEnabled;
+        localStorage.setItem("soundEnabled", soundEnabled);
         const iconSvg = soundBtn.querySelector(".icon-sound");
         if (soundEnabled) {
             iconSvg.classList.remove("muted");
