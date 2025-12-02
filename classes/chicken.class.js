@@ -1,3 +1,7 @@
+/**
+ * A normal chicken enemy.
+ * @extends MovableObject
+ */
 class Chicken extends MovableObject {
     IMAGES_WALKING = [
         "./img/3_enemies_chicken/chicken_normal/1_walk/1_w.png",
@@ -9,6 +13,10 @@ class Chicken extends MovableObject {
 
     isDead = false;
 
+    /**
+     * Creates a chicken at the given x position.
+     * @param {number} [x] - X position, random if not provided.
+     */
     constructor(x) {
         super().loadImage(
             "./img/3_enemies_chicken/chicken_normal/1_walk/1_w.png"
@@ -23,6 +31,9 @@ class Chicken extends MovableObject {
         this.animate();
     }
 
+    /**
+     * Starts the chicken movement and walking animation.
+     */
     animate() {
         setInterval(() => {
             if (!world?.isPaused && !this.isDead) {
@@ -37,6 +48,9 @@ class Chicken extends MovableObject {
         }, 200);
     }
 
+    /**
+     * Kills the chicken and plays the death sound.
+     */
     kill() {
         this.isDead = true;
         this.speed = 0;
