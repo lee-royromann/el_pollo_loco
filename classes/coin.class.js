@@ -1,7 +1,16 @@
+/**
+ * A collectible coin.
+ * @extends MovableObject
+ */
 class Coin extends MovableObject {
     IMAGES_COIN = ["./img/8_coin/coin_1.png", "./img/8_coin/coin_2.png"];
     rotationAngle = 0;
 
+    /**
+     * Creates a coin at the given position.
+     * @param {number} x - X position of the coin.
+     * @param {number} y - Y position of the coin.
+     */
     constructor(x, y) {
         super().loadImage("./img/8_coin/coin_1.png");
         this.loadImages(this.IMAGES_COIN);
@@ -18,6 +27,9 @@ class Coin extends MovableObject {
         this.animate();
     }
 
+    /**
+     * Starts the coin rotation animation.
+     */
     animate() {
         setInterval(() => {
             this.rotationAngle += 3;
@@ -27,6 +39,10 @@ class Coin extends MovableObject {
         }, 1000 / 60);
     }
 
+    /**
+     * Draws the coin with 3D rotation effect.
+     * @param {CanvasRenderingContext2D} ctx - The canvas rendering context.
+     */
     draw(ctx) {
         try {
             if (this.img && this.img.complete && this.img.naturalHeight > 0) {
@@ -49,7 +65,7 @@ class Coin extends MovableObject {
                 ctx.restore();
             }
         } catch (e) {
-            // Bild noch nicht geladen
+            // Picture not loaded yet, do nothing.
         }
     }
 }
