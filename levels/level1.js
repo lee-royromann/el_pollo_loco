@@ -1,3 +1,7 @@
+/**
+ * Creates and returns the first level with all game objects.
+ * @returns {Level} The configured level instance.
+ */
 function createLevel1() {
     return new Level(
         [
