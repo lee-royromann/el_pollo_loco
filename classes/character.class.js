@@ -154,7 +154,10 @@ class Character extends MovableObject {
     startIdleAnimation() {
         this.intervals.push(
             setInterval(() => {
-                if (this.world && this.world.isPaused) return;
+                if (this.world && this.world.isPaused) {
+                    this.stopSnoringSound();
+                    return;
+                }
                 if (this.shouldBeIdle()) {
                     this.isLongIdle() ? this.playLongIdle() : this.playShortIdle();
                 } else {
