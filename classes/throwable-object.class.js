@@ -27,6 +27,7 @@ class ThrowableObject extends MovableObject {
         this.width = 50;
         this.height = 90;
         this.direction = direction;
+        this.world = null;
         this.offset = {
             top: 10,
             bottom: 10,
@@ -45,20 +46,34 @@ class ThrowableObject extends MovableObject {
         }
     }
 
+    applyGravity() {
+        setInterval(() => {
+            if (this.world && this.world.isPaused) return;
+            if (this.isAboveGround() || this.speedY > 0) {
+                this.y -= this.speedY;
+                this.speedY -= this.acceleration;
+            }
+        }, 1000 / 60);
+    }
+
     throw() {
         this.speedY = 20;
         this.applyGravity();
         this.throwInterval = setInterval(() => {
-            if (!this.isSplashing) {
-                this.x += 10 * this.direction;
+            if (this.world && !this.world.isPaused) {
+                if (!this.isSplashing) {
+                    this.x += 10 * this.direction;
+                }
             }
         }, 1000 / 60);
     }
 
     animate() {
         setInterval(() => {
-            if (!this.isSplashing) {
-                this.playAnimation(this.IMAGES_BOTTLES);
+            if (this.world && !this.world.isPaused) {
+                if (!this.isSplashing) {
+                    this.playAnimation(this.IMAGES_BOTTLES);
+                }
             }
         }, 50);
     }
