@@ -1,3 +1,6 @@
+/**
+ * Tracks which keys are pressed.
+ */
 class Keyboard {
     LEFT = false;
     RIGHT = false;
