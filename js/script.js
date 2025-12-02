@@ -253,6 +253,9 @@ function initTouchControls() {
                 e.preventDefault();
                 keyboard[buttons[id]] = false;
             });
+            btn.addEventListener("contextmenu", (e) => {
+                e.preventDefault();
+            });
         }
     }
 }
