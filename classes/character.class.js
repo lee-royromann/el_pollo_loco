@@ -1,3 +1,7 @@
+/**
+ * The main player character Pepe.
+ * @extends MovableObject
+ */
 class Character extends MovableObject {
     IMAGES_WALKING = [
         "./img/2_character_pepe/2_walk/W-21.png",
@@ -62,6 +66,9 @@ class Character extends MovableObject {
         "./img/2_character_pepe/1_idle/long_idle/I-20.png",
     ];
 
+    /**
+     * Creates the character.
+     */
     constructor() {
         super().loadImage("./img/2_character_pepe/1_idle/idle/I-1.png");
         this.loadImages(this.IMAGES_WALKING);
@@ -96,6 +103,9 @@ class Character extends MovableObject {
         this.animate();
     }
 
+    /**
+     * Starts all character animations and controls.
+     */
     animate() {
         this.startJumpAnimation();
         this.startMovementControl();
@@ -105,6 +115,9 @@ class Character extends MovableObject {
         this.startWalkingSoundControl();
     }
 
+    /**
+     * Controls the jump animation frames.
+     */
     startJumpAnimation() {
         this.intervals.push(
             setInterval(() => {
@@ -121,6 +134,9 @@ class Character extends MovableObject {
         );
     }
 
+    /**
+     * Controls character movement based on keyboard input.
+     */
     startMovementControl() {
         this.intervals.push(
             setInterval(() => {
@@ -139,6 +155,9 @@ class Character extends MovableObject {
         );
     }
 
+    /**
+     * Controls which animation to play based on state.
+     */
     startAnimationControl() {
         this.intervals.push(
             setInterval(() => {
@@ -151,6 +170,9 @@ class Character extends MovableObject {
         );
     }
 
+    /**
+     * Controls the idle animation based on idle duration.
+     */
     startIdleAnimation() {
         this.intervals.push(
             setInterval(() => {
@@ -167,6 +189,9 @@ class Character extends MovableObject {
         );
     }
 
+    /**
+     * Controls jump input and triggers jump action.
+     */
     startJumpControl() {
         this.intervals.push(
             setInterval(() => {
@@ -180,6 +205,9 @@ class Character extends MovableObject {
         );
     }
 
+    /**
+     * Controls the walking sound playback.
+     */
     startWalkingSoundControl() {
         this.intervals.push(
             setInterval(() => {
@@ -192,18 +220,34 @@ class Character extends MovableObject {
         );
     }
 
+    /**
+     * Checks if the character can move right.
+     * @returns {boolean} True if right movement is possible.
+     */
     canMoveRight() {
         return (this.world && this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x);
     }
 
+    /**
+     * Checks if the character can move left.
+     * @returns {boolean} True if left movement is possible.
+     */
     canMoveLeft() {
         return this.world && this.world.keyboard.LEFT && this.x > 0;
     }
 
+    /**
+     * Checks if the character is currently walking.
+     * @returns {boolean} True if character is walking.
+     */
     isWalking() {
         return (this.world && (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) && !this.isAboveGround() && this.jumpAnimationIndex === 0);
     }
 
+    /**
+     * Checks if the character should play idle animation.
+     * @returns {boolean} True if character should be idle.
+     */
     shouldBeIdle() {
         return (
             this.world &&
@@ -216,37 +260,65 @@ class Character extends MovableObject {
         );
     }
 
+    /**
+     * Checks if character has been idle for a long time.
+     * @returns {boolean} True if idle for more than 5 seconds.
+     */
     isLongIdle() {
         return new Date().getTime() - this.lastAction > 5000;
     }
 
+    /**
+     * Checks if the character can jump.
+     * @returns {boolean} True if jump is possible.
+     */
     canJump() {
         return this.world && this.world.keyboard.SPACE && !this.isAboveGround();
     }
 
+    /**
+     * Checks if walking sound should be played.
+     * @returns {boolean} True if walking sound should play.
+     */
     shouldPlayWalkingSound() {
         return (this.world && (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) &&!this.isAboveGround() &&!this.isHurt());
     }
 
+    /**
+     * Sets the current jump animation frame.
+     * @param {number} index - The frame index to display.
+     */
     setJumpFrame(index) {
         this.img = this.imageCache[this.IMAGES_JUMPING[index]];
     }
 
+    /**
+     * Plays the long idle animation with snoring sound.
+     */
     playLongIdle() {
         this.playAnimation(this.IMAGES_LONG_IDLE);
         this.startSnoringSound();
     }
 
+    /**
+     * Plays the short idle animation without snoring.
+     */
     playShortIdle() {
         this.playAnimation(this.IMAGES_IDLE);
         this.stopSnoringSound();
     }
 
+    /**
+     * Plays the jump sound effect.
+     */
     playJumpSound() {
         sounds.characterJump.currentTime = 0;
         playSound(sounds.characterJump);
     }
 
+    /**
+     * Handles the death animation and sound.
+     */
     handleDeathAnimation() {
         if (!this.deathSoundPlayed) {
             playSound(sounds.characterDead);
@@ -255,14 +327,23 @@ class Character extends MovableObject {
         if (!this.deathAnimationDone) this.playDeathOnce();
     }
 
+    /**
+     * Updates the timestamp of the last action.
+     */
     updateLastAction() {
         this.lastAction = new Date().getTime();
     }
 
+    /**
+     * Starts the snoring sound if not already playing.
+     */
     startSnoringSound() {
         if (sounds.characterSnoring.paused) playSound(sounds.characterSnoring);
     }
 
+    /**
+     * Stops the snoring sound and resets playback.
+     */
     stopSnoringSound() {
         if (!sounds.characterSnoring.paused) {
             sounds.characterSnoring.pause();
@@ -270,12 +351,18 @@ class Character extends MovableObject {
         }
     }
 
+    /**
+     * Stops all movement intervals and sounds.
+     */
     stopMoving() {
         this.intervals.forEach((interval) => clearInterval(interval));
         this.intervals = [];
         this.stopSnoringSound();
     }
 
+    /**
+     * Plays the death animation once frame by frame.
+     */
     playDeathOnce() {
         if (this.deathFrameIndex < this.IMAGES_DEAD.length) {
             this.setDeathFrame(this.deathFrameIndex);
@@ -288,11 +375,18 @@ class Character extends MovableObject {
         }
     }
 
+    /**
+     * Sets the current death animation frame.
+     * @param {number} index - The frame index to display.
+     */
     setDeathFrame(index) {
         const img = this.imageCache[this.IMAGES_DEAD[index]];
         if (img) this.img = img;
     }
 
+    /**
+     * Marks the death animation as complete.
+     */
     finishDeathAnimation() {
         this.setDeathFrame(0);
         this.deathAnimationDone = true;
