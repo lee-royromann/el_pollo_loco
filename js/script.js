@@ -26,12 +26,19 @@ sounds.characterSnoring.loop = true;
 sounds.backgroundMusic.loop = true;
 sounds.backgroundMusic.volume = 0.3;
 
+/**
+ * Plays a sound if sound is enabled.
+ * @param {HTMLAudioElement} sound - The audio element to play.
+ */
 window.playSound = function (sound) {
     if (soundEnabled && sound) {
         sound.play().catch(() => {});
     }
 };
 
+/**
+ * Initializes the game when the page loads.
+ */
 window.addEventListener("load", () => {
     document.getElementById("loading-overlay").classList.add("hidden");
     initStartScreen();
@@ -40,6 +47,9 @@ window.addEventListener("load", () => {
     initFullscreenButton();
 });
 
+/**
+ * Initializes the start screen buttons and modals.
+ */
 function initStartScreen() {
     const startBtn = document.getElementById("start-btn");
     const infoBtn = document.getElementById("info-btn");
@@ -110,6 +120,9 @@ function initStartScreen() {
     document.getElementById("home-btn-win").addEventListener("click", goToHome);
 }
 
+/**
+ * Starts the game and hides the start overlay.
+ */
 function startGame() {
     if (gameStarted) return;
     gameStarted = true;
@@ -122,6 +135,9 @@ function startGame() {
     }
 }
 
+/**
+ * Initializes the canvas and creates the game world.
+ */
 function init() {
     if (!canvas) {
         canvas = document.getElementById("canvas");
@@ -129,6 +145,9 @@ function init() {
     world = new World(canvas, keyboard);
 }
 
+/**
+ * Restarts the game from the beginning.
+ */
 function restartGame() {
     document.getElementById("gameover-overlay").style.display = "none";
     document.getElementById("win-overlay").style.display = "none";
@@ -147,6 +166,9 @@ function restartGame() {
     }
 }
 
+/**
+ * Returns to the home screen and resets game state.
+ */
 function goToHome() {
     document.getElementById("gameover-overlay").style.display = "none";
     document.getElementById("win-overlay").style.display = "none";
@@ -165,6 +187,9 @@ function goToHome() {
     document.getElementById("start-overlay").style.display = "flex";
 }
 
+/**
+ * Handles keyboard key press events.
+ */
 window.addEventListener("keydown", (e) => {
     if (e.key == "ArrowLeft") {
         keyboard.LEFT = true;
@@ -195,6 +220,9 @@ window.addEventListener("keydown", (e) => {
     }
 });
 
+/**
+ * Handles keyboard key release events.
+ */
 window.addEventListener("keyup", (e) => {
     if (e.key == "ArrowLeft") {
         keyboard.LEFT = false;
@@ -213,12 +241,18 @@ window.addEventListener("keyup", (e) => {
     }
 });
 
+/**
+ * Initializes responsive behavior for game scaling.
+ */
 function initResponsive() {
     resizeGame();
     window.addEventListener("resize", resizeGame);
     window.addEventListener("orientationchange", resizeGame);
 }
 
+/**
+ * Resizes the game container based on window size.
+ */
 function resizeGame() {
     const wrapper = document.getElementById("game-wrapper");
     const container = document.getElementById("game-container");
@@ -234,6 +268,9 @@ function resizeGame() {
     wrapper.style.height = `${480 * scale}px`;
 }
 
+/**
+ * Initializes touch controls for mobile devices.
+ */
 function initTouchControls() {
     const buttons = {
         "btn-left": "LEFT",
@@ -260,6 +297,9 @@ function initTouchControls() {
     }
 }
 
+/**
+ * Initializes the fullscreen toggle button.
+ */
 function initFullscreenButton() {
     const btn = document.getElementById("fullscreen-btn");
     if (!btn) return;
