@@ -1,3 +1,7 @@
+/**
+ * A bottle that can be thrown at enemies.
+ * @extends MovableObject
+ */
 class ThrowableObject extends MovableObject {
     IMAGES_BOTTLES = [
         "./img/6_salsa_bottle/bottle_rotation/1_bottle_rotation.png",
@@ -17,6 +21,12 @@ class ThrowableObject extends MovableObject {
 
     isSplashing = false;
 
+    /**
+     * Creates a throwable bottle.
+     * @param {number} x - Starting x position.
+     * @param {number} y - Starting y position.
+     * @param {number} direction - Throw direction (1 or -1).
+     */
     constructor(x, y, direction) {
         super();
         this.loadImage(this.IMAGES_BOTTLES[0]);
@@ -38,6 +48,10 @@ class ThrowableObject extends MovableObject {
         this.animate();
     }
 
+    /**
+     * Checks if the bottle is above ground.
+     * @returns {boolean} Always true for throwable objects.
+     */
     isAboveGround() {
         if (this instanceof ThrowableObject) {
             return true;
@@ -46,6 +60,9 @@ class ThrowableObject extends MovableObject {
         }
     }
 
+    /**
+     * Applies gravity to the thrown bottle.
+     */
     applyGravity() {
         setInterval(() => {
             if (this.world && this.world.isPaused) return;
@@ -56,6 +73,9 @@ class ThrowableObject extends MovableObject {
         }, 1000 / 60);
     }
 
+    /**
+     * Throws the bottle with upward speed.
+     */
     throw() {
         this.speedY = 20;
         this.applyGravity();
@@ -68,6 +88,9 @@ class ThrowableObject extends MovableObject {
         }, 1000 / 60);
     }
 
+    /**
+     * Rotates the bottle while flying.
+     */
     animate() {
         setInterval(() => {
             if (this.world && !this.world.isPaused) {
@@ -78,6 +101,9 @@ class ThrowableObject extends MovableObject {
         }, 50);
     }
 
+    /**
+     * Plays the splash animation when bottle hits something.
+     */
     splash() {
         this.isSplashing = true;
         this.speedY = 0;
