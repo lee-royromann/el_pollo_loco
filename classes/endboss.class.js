@@ -1,3 +1,7 @@
+/**
+ * The final boss enemy.
+ * @extends MovableObject
+ */
 class Endboss extends MovableObject {
     IMAGES_WALKING = [
         "./img/4_enemie_boss_chicken/1_walk/G1.png",
@@ -50,6 +54,9 @@ class Endboss extends MovableObject {
     lastAttackTime = 0;
     world = null;
 
+    /**
+     * Creates the endboss.
+     */
     constructor() {
         super().loadImage(this.IMAGES_ALERT[0]);
         this.loadImages(this.IMAGES_WALKING);
@@ -72,6 +79,9 @@ class Endboss extends MovableObject {
         this.checkForActivation();
     }
 
+    /**
+     * Checks if player is close enough to activate the boss.
+     */
     checkForActivation() {
         setInterval(() => {
             if (!this.world || !this.world.character || this.world.isPaused) return;
@@ -82,6 +92,9 @@ class Endboss extends MovableObject {
         }, 100);
     }
 
+    /**
+     * Plays the alert animation before boss fight starts.
+     */
     playAlertAnimation() {
         this.isPlayingAlert = true;
         let i = 0;
@@ -98,6 +111,9 @@ class Endboss extends MovableObject {
         }, 200);
     }
 
+    /**
+     * Starts the boss movement behavior.
+     */
     startMovement() {
         setInterval(() => {
             if (this.world?.isPaused) return;
@@ -118,11 +134,18 @@ class Endboss extends MovableObject {
         }, 1000 / 60);
     }
 
+    /**
+     * Checks if enough time has passed to attack again.
+     * @returns {boolean} True if attack is ready.
+     */
     canAttack() {
         let currentTime = new Date().getTime();
         return currentTime - this.lastAttackTime > 3000;
     }
 
+    /**
+     * Initiates an attack sequence.
+     */
     attack() {
         this.isAttacking = true;
         this.lastAttackTime = new Date().getTime();
@@ -132,6 +155,9 @@ class Endboss extends MovableObject {
         }, 1400);
     }
 
+    /**
+     * Controls the boss animation state.
+     */
     animate() {
         setInterval(() => {
             if (this.world?.isPaused) return;
@@ -149,6 +175,9 @@ class Endboss extends MovableObject {
         }, 200);
     }
 
+    /**
+     * Plays the death animation frame by frame.
+     */
     playDeathAnimation() {
         if (this.currentImage < this.IMAGES_DEAD.length) {
             let path = this.IMAGES_DEAD[this.currentImage];
@@ -160,6 +189,9 @@ class Endboss extends MovableObject {
         }
     }
 
+    /**
+     * Makes the boss fall after death.
+     */
     startFalling() {
         setInterval(() => {
             if (!this.world?.isPaused) {
@@ -168,12 +200,19 @@ class Endboss extends MovableObject {
         }, 1000 / 60);
     }
 
+    /**
+     * Checks if the boss was recently hurt.
+     * @returns {boolean} True if hurt within last 0.5 seconds.
+     */
     isHurt() {
         let timePassed = new Date().getTime() - this.lastHit;
         timePassed = timePassed / 1000;
         return timePassed < 0.5;
     }
 
+    /**
+     * Reduces boss energy when hit.
+     */
     hit() {
         this.energy--;
         this.lastHit = new Date().getTime();
@@ -183,6 +222,9 @@ class Endboss extends MovableObject {
         }
     }
 
+    /**
+     * Kills the boss.
+     */
     kill() {
         this.isDead = true;
         this.speed = 0;
@@ -190,16 +232,28 @@ class Endboss extends MovableObject {
         playSound(sounds.endbossDead);
     }
 
+    /**
+     * Checks if player is close enough to wake up the boss.
+     * @param {number} distance - Distance to player.
+     * @returns {boolean} True if should activate.
+     */
     isCloseEnoughToActivate(distance) {
         return distance < 500 && !this.isActive && !this.isPlayingAlert;
     }
 
+    /**
+     * Starts the boss fight after alert animation.
+     */
     startBossFight() {
         this.isPlayingAlert = false;
         this.isActive = true;
         this.startMovement();
     }
 
+    /**
+     * Moves the boss towards the player.
+     * @param {number} distance - Distance to player (positive = player is left).
+     */
     moveTowardsPlayer(distance) {
         if (distance > 20) {
             this.x -= 4;
@@ -210,11 +264,19 @@ class Endboss extends MovableObject {
         }
     }
 
+    /**
+     * Turns to player and attacks.
+     * @param {number} distance - Distance to player.
+     */
     turnToPlayerAndAttack(distance) {
         this.otherDirection = distance <= 0;
         this.attack();
     }
 
+    /**
+     * Moves boss away from player when attack is on cooldown.
+     * @param {number} distance - Distance to player.
+     */
     backAwayFromPlayer(distance) {
         if (distance > 30) {
             this.x += 0.8;
