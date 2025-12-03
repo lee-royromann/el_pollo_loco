@@ -1,8 +1,18 @@
+/**
+ * Checks and handles all collisions.
+ */
 class CollisionHandler {
+    /**
+     * Creates a collision handler.
+     * @param {World} world - Reference to the game world.
+     */
     constructor(world) {
         this.world = world;
     }
 
+    /**
+     * Checks all collision types each frame.
+     */
     checkAllCollisions() {
         this.checkEnemyCollisions();
         this.checkBottleCollisions();
@@ -10,6 +20,9 @@ class CollisionHandler {
         this.checkBottleCollections();
     }
 
+    /**
+     * Checks collisions between character and enemies.
+     */
     checkEnemyCollisions() {
         this.world.level.enemies.forEach((enemy) => {
             if (this.world.character.isColliding(enemy) && !enemy.isDead) {
@@ -22,6 +35,9 @@ class CollisionHandler {
         });
     }
 
+    /**
+     * Checks collisions between thrown bottles and enemies.
+     */
     checkBottleCollisions() {
         this.world.throwableObjects.forEach((bottle, bottleIndex) => {
             this.world.level.enemies.forEach((enemy) => {
@@ -32,6 +48,9 @@ class CollisionHandler {
         });
     }
 
+    /**
+     * Checks collisions between character and coins.
+     */
     checkCoinCollisions() {
         this.world.level.coins.forEach((coin, coinIndex) => {
             if (this.world.character.isColliding(coin)) {
@@ -40,6 +59,9 @@ class CollisionHandler {
         });
     }
 
+    /**
+     * Checks collisions between character and collectible bottles.
+     */
     checkBottleCollections() {
         this.world.level.bottles.forEach((bottle, bottleIndex) => {
             if (this.world.character.isColliding(bottle)) {
@@ -48,11 +70,18 @@ class CollisionHandler {
         });
     }
 
+    /**
+     * Applies damage to the character and updates health bar.
+     */
     damageCharacter() {
         this.world.character.hit();
         this.world.statusBar.setPercentage(this.world.character.energy);
     }
 
+    /**
+     * Collects a coin and updates the coin status bar.
+     * @param {number} coinIndex - Index of the coin to collect.
+     */
     collectCoin(coinIndex) {
         sounds.coinCollect.currentTime = 0;
         playSound(sounds.coinCollect);
@@ -62,6 +91,10 @@ class CollisionHandler {
         this.world.statusBarCoin.setPercentage(percentage);
     }
 
+    /**
+     * Collects a bottle and updates the bottle status bar.
+     * @param {number} bottleIndex - Index of the bottle to collect.
+     */
     collectBottle(bottleIndex) {
         sounds.bottleCollect.currentTime = 0;
         playSound(sounds.bottleCollect);
@@ -70,10 +103,21 @@ class CollisionHandler {
         this.world.updateBottleStatusBar();
     }
 
+    /**
+     * Checks if character is jumping on an enemy from above.
+     * @param {MovableObject} enemy - The enemy to check.
+     * @returns {boolean} True if character is landing on enemy.
+     */
     isJumpingOnEnemy(enemy) {
         return this.world.character.speedY < 0 && this.world.character.y < 120 && this.world.character.y < enemy.y - 50;
     }
 
+    /**
+     * Handles a bottle hitting an enemy.
+     * @param {ThrowableObject} bottle - The thrown bottle.
+     * @param {MovableObject} enemy - The enemy hit.
+     * @param {number} bottleIndex - Index of the bottle.
+     */
     handleBottleHit(bottle, enemy, bottleIndex) {
         if (this.isEndboss(enemy)) {
             this.damageEndboss(enemy);
@@ -88,21 +132,38 @@ class CollisionHandler {
         }, 650);
     }
 
+    /**
+     * Checks if an enemy is the endboss.
+     * @param {MovableObject} enemy - The enemy to check.
+     * @returns {boolean} True if enemy is the endboss.
+     */
     isEndboss(enemy) {
         return enemy.constructor.name == "Endboss";
     }
 
+    /**
+     * Damages the endboss and updates its health bar.
+     * @param {Endboss} enemy - The endboss to damage.
+     */
     damageEndboss(enemy) {
         enemy.hit();
         let percentage = (enemy.energy / 5) * 100;
         this.world.statusBarEndboss.setPercentage(percentage);
     }
 
+    /**
+     * Plays the bottle break sound effect.
+     */
     playBottleBreakSound() {
         sounds.bottleBreaks.currentTime = 0;
         playSound(sounds.bottleBreaks);
     }
 
+    /**
+     * Positions the bottle splash animation on the enemy.
+     * @param {ThrowableObject} bottle - The splashing bottle.
+     * @param {MovableObject} enemy - The enemy that was hit.
+     */
     positionBottleSplash(bottle, enemy) {
         let centerX = enemy.x + enemy.width / 2;
         let centerY = enemy.y + enemy.height / 2;
@@ -116,6 +177,10 @@ class CollisionHandler {
         bottle.y = bottle.y < centerY ? enemy.y + offsetTop + insetY : enemy.y + enemy.height - offsetBottom - bottle.height - insetY;
     }
 
+    /**
+     * Kills an enemy and removes it after delay.
+     * @param {MovableObject} enemy - The enemy to kill.
+     */
     killEnemy(enemy) {
         enemy.kill();
         setTimeout(() => {
