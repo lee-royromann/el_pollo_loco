@@ -24,7 +24,22 @@ let sounds = {
 
 sounds.characterSnoring.loop = true;
 sounds.backgroundMusic.loop = true;
+
 sounds.backgroundMusic.volume = 0.3;
+sounds.characterSnoring.volume = 0.3;
+sounds.coinCollect.volume = 0.4;
+sounds.bottleCollect.volume = 0.4;
+sounds.characterWalking.volume = 0.5;
+sounds.characterJump.volume = 0.5;
+sounds.characterThrow.volume = 0.5;
+sounds.bottleBreaks.volume = 0.5;
+sounds.characterHurt.volume = 0.6;
+sounds.characterDead.volume = 0.6;
+sounds.characterWin.volume = 0.6;
+sounds.chickenDead.volume = 0.5;
+sounds.smallChickenDead.volume = 0.5;
+sounds.endbossHurt.volume = 0.7;
+sounds.endbossDead.volume = 0.7;
 
 /**
  * Plays a sound if sound is enabled.
@@ -52,10 +67,8 @@ window.addEventListener("load", () => {
  */
 function initStartScreen() {
     const startBtn = document.getElementById("start-btn");
-    const infoBtn = document.getElementById("info-btn");
     const keyboardBtn = document.getElementById("keyboard-btn");
     const soundBtn = document.getElementById("sound-btn");
-    const infoModal = document.getElementById("info-modal");
     const keyboardModal = document.getElementById("keyboard-modal");
 
     if (!soundEnabled) {
@@ -64,10 +77,6 @@ function initStartScreen() {
 
     startBtn.addEventListener("click", () => {
         startGame();
-    });
-
-    infoBtn.addEventListener("click", () => {
-        infoModal.classList.add("active");
     });
 
     keyboardBtn.addEventListener("click", () => {
