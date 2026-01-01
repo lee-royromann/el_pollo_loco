@@ -29,7 +29,7 @@ class CollisionHandler {
                 if (this.isJumpingOnEnemy(enemy) && !this.isEndboss(enemy)) {
                     this.killEnemy(enemy);
                 } else if (!this.world.character.isHurt()) {
-                    this.damageCharacter();
+                    this.damageCharacter(this.isEndboss(enemy));
                 }
             }
         });
@@ -37,8 +37,10 @@ class CollisionHandler {
 
     /**
      * Checks collisions between thrown bottles and enemies.
+     * Ignores collisions if character is already dead (prevents win after game over).
      */
     checkBottleCollisions() {
+        if (this.world.character.isDead()) return;
         this.world.throwableObjects.forEach((bottle, bottleIndex) => {
             this.world.level.enemies.forEach((enemy) => {
                 if (bottle.isColliding(enemy) && !enemy.isDead && !bottle.isSplashing) {
@@ -72,9 +74,11 @@ class CollisionHandler {
 
     /**
      * Applies damage to the character and updates health bar.
+     * @param {boolean} isEndboss - True if damage is from endboss.
      */
-    damageCharacter() {
-        this.world.character.hit();
+    damageCharacter(isEndboss = false) {
+        let damage = isEndboss ? 15 : 5;
+        this.world.character.takeDamage(damage);
         this.world.statusBar.setPercentage(this.world.character.energy);
     }
 
@@ -147,7 +151,7 @@ class CollisionHandler {
      */
     damageEndboss(enemy) {
         enemy.hit();
-        let percentage = (enemy.energy / 5) * 100;
+        let percentage = (enemy.energy / enemy.maxEnergy) * 100;
         this.world.statusBarEndboss.setPercentage(percentage);
     }
 
