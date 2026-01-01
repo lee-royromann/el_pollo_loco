@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>El Pollo Loco</title>
     <link rel="icon" type="image/png" href="img/11_favicon/favicon.png">
     <link rel="stylesheet" href="style.css">
@@ -53,6 +53,25 @@
         <div id="game-container">
             <canvas id="canvas" width="720" height="480"></canvas>
 
+            <div id="game-hud">
+                <button id="sound-btn-game" class="btn-hud" title="Toggle Sound">
+                    <svg class="icon-sound" viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z" />
+                    </svg>
+                </button>
+                <button id="pause-btn-game" class="btn-hud" title="Pause Game">
+                    <svg class="icon-pause" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
+                    </svg>
+                </button>
+                <button id="home-btn-game" class="btn-hud" title="Exit Game">
+                    <svg class="icon-home" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
+                    </svg>
+                </button>
+            </div>
+
             <div id="touch-controls">
                 <div class="touch-left">
                     <button class="touch-btn" id="btn-left">
@@ -78,12 +97,13 @@
             <div id="start-overlay">
                 <img src="img/9_intro_outro_screens/start/startscreen_1.png" alt="El Pollo Loco Start Screen"
                     class="start-bg">
+                <h2 class="mobile-title">El Pollo Loco</h2>
                 <div class="start-buttons">
                     <button id="start-btn" class="btn-start">START</button>
                     <div class="icon-buttons">
-                        <a href="legal/impressum.html" class="btn-icon" title="Impressum">
+                        <button id="impressum-btn" class="btn-icon" title="Impressum">
                             <span class="icon-info">i</span>
-                        </a>
+                        </button>
                         <button id="keyboard-btn" class="btn-icon" title="Controls">
                             <svg class="icon-keyboard" viewBox="0 0 24 24" fill="currentColor">
                                 <rect x="2" y="6" width="20" height="12" rx="2" stroke="currentColor" stroke-width="1.5"
@@ -132,6 +152,18 @@
                     </div>
                 </div>
             </div>
+            <div id="impressum-modal" class="modal">
+                <div class="modal-content modal-impressum">
+                    <button class="modal-close">&times;</button>
+                    <h1>Impressum</h1>
+
+                    <p>Lee-Roy Romann<br>
+                        Alpenstrasse 21<br>
+                        3072 Ostermundigen<br>
+                        Schweiz</p>
+                    <p>E-Mail: <a href="mailto:lee-roy@romann.ch">lee-roy@romann.ch</a></p>
+                </div>
+            </div>
             <div id="gameover-overlay">
                 <img src="img/9_intro_outro_screens/game_over/game over.png" alt="Game Over">
                 <div class="overlay-buttons">
@@ -157,7 +189,13 @@
             <div id="pause-overlay">
                 <div class="pause-content">
                     <h2>PAUSED</h2>
-                    <p>Press ESC or P to continue</p>
+                    <p class="pause-hint-desktop">Press ESC or P to continue</p>
+                    <button id="resume-btn" class="btn-resume">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M8 5v14l11-7z"/>
+                        </svg>
+                        RESUME
+                    </button>
                 </div>
             </div>
         </div>
