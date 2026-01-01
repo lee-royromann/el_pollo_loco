@@ -136,6 +136,7 @@ svg.icon-sound.muted path {
 }
 
 .btn-fullscreen {
+    display: none;
     position: fixed;
     bottom: 30px;
     right: 30px;
@@ -145,7 +146,6 @@ svg.icon-sound.muted path {
     border: none;
     border-radius: 50%;
     cursor: pointer;
-    display: flex;
     align-items: center;
     justify-content: center;
     transition: all 0.15s ease;
@@ -166,5 +166,51 @@ svg.icon-sound.muted path {
 .icon-fullscreen {
     width: 28px;
     height: 28px;
+    color: #fff;
+}
+
+#game-hud {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    display: none;
+    flex-direction: row;
+    gap: 8px;
+    z-index: 50;
+}
+
+#game-hud.active {
+    display: flex;
+}
+
+.btn-hud {
+    width: 36px;
+    height: 36px;
+    background: rgba(0, 0, 0, 0.3);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s ease;
+    outline: none;
+}
+
+.btn-hud:focus {
+    outline: none;
+}
+
+.btn-hud:hover {
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.btn-hud:active {
+    transform: scale(0.95);
+}
+
+.btn-hud svg {
+    width: 20px;
+    height: 20px;
     color: #fff;
 }

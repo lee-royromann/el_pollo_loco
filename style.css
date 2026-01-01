@@ -16,7 +16,8 @@ body {
     align-items: center;
     justify-content: center;
     min-height: 100vh;
-    margin: 0;
+    max-width: 1600px;
+    margin: 0 auto;
     padding: 0;
     overflow: hidden;
     font-family: "Arial", sans-serif;
@@ -42,16 +43,21 @@ canvas {
     display: flex;
     align-items: center;
     justify-content: center;
+    overflow: visible;
+    position: relative;
 }
 
 #game-container {
-    position: relative;
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 720px;
     height: 480px;
-    transform-origin: center center;
+    transform-origin: top left;
     box-shadow: 0 0 0 8px #7a4a2e, 0 0 0 12px #f0d2a3,
         0 12px 30px rgba(0, 0, 0, 0.45);
     margin-top: 80px;
+    overflow: hidden;
 }
 
 h1 {

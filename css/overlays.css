@@ -67,6 +67,23 @@
     align-items: flex-start;
 }
 
+.mobile-title {
+    display: none;
+    position: absolute;
+    top: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    margin: 0;
+    font-size: 28px;
+    font-family: "Zabars", serif;
+    color: #ffeb3b;
+    text-shadow: 2px 2px 0 rgba(198, 40, 40, 0.9),
+        -1px -1px 0 rgba(255, 87, 34, 0.5), 3px 3px 8px rgba(0, 0, 0, 0.8);
+    letter-spacing: 3px;
+    z-index: 102;
+    white-space: nowrap;
+}
+
 #gameover-overlay {
     position: absolute;
     top: 0;
@@ -152,6 +169,51 @@
     margin: 0;
     opacity: 0.9;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+}
+
+.btn-resume {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin: 25px auto 0 auto;
+    padding: 12px 30px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #fff;
+    background: rgba(255, 152, 0, 0.9);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    outline: none;
+    box-shadow: 0 4px 0 rgba(180, 100, 0, 0.9), 0 6px 15px rgba(0, 0, 0, 0.4);
+}
+
+.btn-resume svg {
+    width: 24px;
+    height: 24px;
+}
+
+.btn-resume:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 0 rgba(180, 100, 0, 0.9), 0 8px 18px rgba(0, 0, 0, 0.5);
+}
+
+.btn-resume:active {
+    transform: translateY(2px);
+    box-shadow: 0 2px 0 rgba(180, 100, 0, 0.9), 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.btn-resume:focus {
+    outline: none;
+}
+
+/* Hide keyboard hint on touch devices, show button prominently */
+@media (hover: none) {
+    .pause-hint-desktop {
+        display: none;
+    }
 }
 
 #rotate-overlay {
