@@ -32,20 +32,32 @@ class ThrowableObject extends MovableObject {
         this.loadImage(this.IMAGES_BOTTLES[0]);
         this.loadImages(this.IMAGES_BOTTLES);
         this.loadImages(this.IMAGES_SPLASH);
+        this.initPosition(x, y, direction);
+        this.initOffset();
+        this.throw();
+        this.animate();
+    }
+
+    /**
+     * Sets the bottle's position and direction.
+     * @param {number} x - X position.
+     * @param {number} y - Y position.
+     * @param {number} direction - Throw direction.
+     */
+    initPosition(x, y, direction) {
         this.x = x;
         this.y = y;
         this.width = 50;
         this.height = 90;
         this.direction = direction;
         this.world = null;
-        this.offset = {
-            top: 10,
-            bottom: 10,
-            left: 10,
-            right: 10,
-        };
-        this.throw();
-        this.animate();
+    }
+
+    /**
+     * Sets the collision offset.
+     */
+    initOffset() {
+        this.offset = { top: 10, bottom: 10, left: 10, right: 10 };
     }
 
     /**
