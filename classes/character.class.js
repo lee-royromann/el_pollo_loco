@@ -157,7 +157,9 @@ class Character extends MovableObject {
      * Handles all jump animation states.
      */
     handleJumpAnimation() {
-        if (this.jumpState === 'airborne') {
+        if (this.jumpState === 'preparing') {
+            this.handlePrepareAnimation();
+        } else if (this.jumpState === 'airborne') {
             this.handleAirborneAnimation();
         } else if (this.jumpState === 'landing') {
             this.handleLandingAnimation();
@@ -165,11 +167,26 @@ class Character extends MovableObject {
     }
 
     /**
+     * Handles the jump preparation phase (crouch before jump).
+     */
+    handlePrepareAnimation() {
+        this.prepareFrame++;
+        if (this.prepareFrame <= 3) {
+            this.setJumpFrame(0);
+        } else if (this.prepareFrame <= 6) {
+            this.setJumpFrame(1);
+        } else {
+            this.jumpState = 'airborne';
+            this.speedY = 23;
+            this.playJumpSound();
+        }
+    }
+
+    /**
      * Handles animation while character is in the air.
-     * Cycles through all 9 frames smoothly during the jump.
+     * Cycles through frames 2-7 based on velocity.
      */
     handleAirborneAnimation() {
-        this.jumpFrameCounter++;
         let frame = this.getJumpFrameFromPhysics();
         this.setJumpFrame(frame);
         if (!this.isAboveGround() && this.speedY <= 0) {
@@ -179,19 +196,17 @@ class Character extends MovableObject {
     }
 
     /**
-     * Maps the current speedY to an animation frame (0-8).
-     * Ensures all frames are shown during the jump arc.
-     * @returns {number} Frame index 0-8
+     * Maps the current speedY to an animation frame (2-7).
+     * Frame 0-1 are preparation, 8 is landing only.
+     * @returns {number} Frame index 2-7
      */
     getJumpFrameFromPhysics() {
         let maxSpeed = 23;
-        if (this.speedY >= maxSpeed * 0.8) return 0;
-        if (this.speedY >= maxSpeed * 0.5) return 1;
-        if (this.speedY >= maxSpeed * 0.2) return 2;
-        if (this.speedY >= 0) return 3;
-        if (this.speedY >= -maxSpeed * 0.2) return 4;
-        if (this.speedY >= -maxSpeed * 0.5) return 5;
-        if (this.speedY >= -maxSpeed * 0.8) return 6;
+        if (this.speedY >= maxSpeed * 0.6) return 2;
+        if (this.speedY >= maxSpeed * 0.2) return 3;
+        if (this.speedY >= 0) return 4;
+        if (this.speedY >= -maxSpeed * 0.3) return 5;
+        if (this.speedY >= -maxSpeed * 0.6) return 6;
         return 7;
     }
 
@@ -280,13 +295,11 @@ class Character extends MovableObject {
     }
 
     /**
-     * Initiates jump - starts animation at frame 0 and jumps immediately.
+     * Initiates jump - starts preparation phase (crouch before jump).
      */
     initiateJump() {
-        this.jumpState = 'airborne';
-        this.jumpFrameCounter = 0;
-        this.speedY = 23;
-        this.playJumpSound();
+        this.jumpState = 'preparing';
+        this.prepareFrame = 0;
     }
 
     /**

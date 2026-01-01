@@ -209,8 +209,15 @@
     outline: none;
 }
 
-/* Hide keyboard hint on touch devices, show button prominently */
-@media (hover: none) {
+/* Desktop: Show keyboard hint, hide button */
+@media (pointer: fine) {
+    .btn-resume {
+        display: none;
+    }
+}
+
+/* Touch devices: Show button, hide keyboard hint */
+@media (pointer: coarse) {
     .pause-hint-desktop {
         display: none;
     }
