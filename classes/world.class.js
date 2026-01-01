@@ -13,6 +13,9 @@ class World {
     throwableObjects = [];
     lastCharacterX = 100;
     lastSpawnTime = 0;
+    lastThrowTime = 0;
+    throwCooldown = 700;
+    throwKeyReleased = true;
     gameOverShown = false;
     winShown = false;
     isPaused = false;
@@ -81,7 +84,18 @@ class World {
         this.isPaused = false;
         document.getElementById("pause-overlay").classList.remove("active");
         if (soundEnabled && typeof sounds != "undefined" && sounds.backgroundMusic) {
-            sounds.backgroundMusic.play().catch(() => {});
+            sounds.backgroundMusic.play().catch(ignoreAutoplayError);
+        }
+    }
+
+    /**
+     * Toggles pause state - pauses if running, resumes if paused.
+     */
+    togglePause() {
+        if (this.isPaused) {
+            this.resumeGame();
+        } else {
+            this.pauseGame();
         }
     }
 
@@ -109,15 +123,29 @@ class World {
      * Checks if throw button is pressed and bottles available.
      */
     checkThrowObjects() {
-        if (this.keyboard.D && this.character.bottles > 0) {
-            this.throwBottle();
+        if (!this.keyboard.D) {
+            this.throwKeyReleased = true;
         }
+        if (this.keyboard.D && this.character.bottles > 0 && this.canThrow() && this.throwKeyReleased) {
+            this.throwBottle();
+            this.throwKeyReleased = false;
+        }
+    }
+
+    /**
+     * Checks if enough time has passed since last throw.
+     * @returns {boolean} True if cooldown has passed.
+     */
+    canThrow() {
+        let currentTime = new Date().getTime();
+        return currentTime - this.lastThrowTime > this.throwCooldown;
     }
 
     /**
      * Creates and throws a bottle in the character's facing direction.
      */
     throwBottle() {
+        this.lastThrowTime = new Date().getTime();
         let direction = this.character.otherDirection ? -1 : 1;
         let bottle = new ThrowableObject(this.character.x + 50, this.character.y + 100, direction);
         bottle.world = this;
@@ -303,7 +331,9 @@ class World {
         this.addToMap(this.statusBar);
         this.addToMap(this.statusBarCoin);
         this.addToMap(this.statusBarBottle);
-        this.addToMap(this.statusBarEndboss);
+        if (this.statusBarEndboss.visible) {
+            this.addToMap(this.statusBarEndboss);
+        }
         this.ctx.translate(this.camera_x, 0);
     }
 
