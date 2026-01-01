@@ -24,18 +24,8 @@ class DrawableObject {
      * @param {CanvasRenderingContext2D} ctx - The canvas rendering context.
      */
     draw(ctx) {
-        try {
-            if (this.img && this.img.complete && this.img.naturalHeight > 0) {
-                ctx.drawImage(
-                    this.img,
-                    this.x,
-                    this.y,
-                    this.width,
-                    this.height
-                );
-            }
-        } catch (e) {
-            // Picture not loaded yet, do nothing.
+        if (this.img && this.img.complete && this.img.naturalHeight > 0) {
+            ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
         }
     }
 
@@ -44,28 +34,47 @@ class DrawableObject {
      * @param {CanvasRenderingContext2D} ctx - The canvas rendering context.
      */
     drawFrame(ctx) {
-        if (
-            this instanceof Character ||
-            this instanceof Chicken ||
-            this instanceof SmallChicken ||
-            this instanceof Endboss
-        ) {
-            ctx.beginPath();
-            ctx.lineWidth = "3";
-            ctx.strokeStyle = "blue";
-            ctx.rect(this.x, this.y, this.width, this.height);
-            ctx.stroke();
-            ctx.beginPath();
-            ctx.lineWidth = "3";
-            ctx.strokeStyle = "red";
-            ctx.rect(
-                this.x + this.offset.left,
-                this.y + this.offset.top,
-                this.width - this.offset.left - this.offset.right,
-                this.height - this.offset.top - this.offset.bottom
-            );
-            ctx.stroke();
+        if (this.isDebuggableObject()) {
+            this.drawBoundingBox(ctx);
+            this.drawHitbox(ctx);
         }
+    }
+
+    /**
+     * Checks if this object should show debug frames.
+     * @returns {boolean} True if object is a debuggable type.
+     */
+    isDebuggableObject() {
+        return this instanceof Character || this instanceof Chicken ||
+               this instanceof SmallChicken || this instanceof Endboss;
+    }
+
+    /**
+     * Draws the outer bounding box.
+     * @param {CanvasRenderingContext2D} ctx - Canvas context.
+     */
+    drawBoundingBox(ctx) {
+        ctx.beginPath();
+        ctx.lineWidth = "3";
+        ctx.strokeStyle = "blue";
+        ctx.rect(this.x, this.y, this.width, this.height);
+        ctx.stroke();
+    }
+
+    /**
+     * Draws the inner hitbox with offset.
+     * @param {CanvasRenderingContext2D} ctx - Canvas context.
+     */
+    drawHitbox(ctx) {
+        ctx.beginPath();
+        ctx.lineWidth = "3";
+        ctx.strokeStyle = "red";
+        let x = this.x + this.offset.left;
+        let y = this.y + this.offset.top;
+        let w = this.width - this.offset.left - this.offset.right;
+        let h = this.height - this.offset.top - this.offset.bottom;
+        ctx.rect(x, y, w, h);
+        ctx.stroke();
     }
 
     /**
