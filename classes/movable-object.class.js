@@ -24,6 +24,9 @@ class MovableObject extends DrawableObject {
             if (this.isAboveGround() || this.speedY > 0) {
                 this.y -= this.speedY;
                 this.speedY -= this.acceleration;
+            } else {
+                this.y = 120;
+                this.speedY = 0;
             }
         }, 1000 / 60);
     }
@@ -84,7 +87,15 @@ class MovableObject extends DrawableObject {
      * Reduces energy when hit and plays hurt sound.
      */
     hit() {
-        this.energy -= 5;
+        this.takeDamage(5);
+    }
+
+    /**
+     * Takes a specific amount of damage.
+     * @param {number} damage - Amount of damage to take.
+     */
+    takeDamage(damage) {
+        this.energy -= damage;
         if (this.energy < 0) {
             this.energy = 0;
         } else {
