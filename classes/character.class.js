@@ -71,36 +71,61 @@ class Character extends MovableObject {
      */
     constructor() {
         super().loadImage("./img/2_character_pepe/1_idle/idle/I-1.png");
+        this.loadAllImages();
+        this.applyGravity();
+        this.initPosition();
+        this.initStats();
+        this.initOffset();
+        this.animate();
+    }
+
+    /**
+     * Loads all character animation images.
+     */
+    loadAllImages() {
         this.loadImages(this.IMAGES_WALKING);
         this.loadImages(this.IMAGES_JUMPING);
         this.loadImages(this.IMAGES_DEAD);
         this.loadImages(this.IMAGES_HURT);
         this.loadImages(this.IMAGES_IDLE);
         this.loadImages(this.IMAGES_LONG_IDLE);
-        this.applyGravity();
+    }
+
+    /**
+     * Sets the character's initial position and size.
+     */
+    initPosition() {
         this.x = 100;
         this.y = 120;
         this.height = 320;
         this.width = 160;
-        this.world;
         this.speed = 8;
+    }
+
+    /**
+     * Initializes character stats and state.
+     */
+    initStats() {
+        this.world;
         this.jumpAnimationIndex = 0;
+        this.jumpState = 'idle';
+        this.jumpPrepareFrame = 0;
         this.lastAction = new Date().getTime();
         this.coins = 0;
         this.maxCoins = 14;
         this.bottles = 0;
-        this.maxBottles = 10;
+        this.maxBottles = 15;
         this.deathSoundPlayed = false;
         this.deathAnimationDone = false;
         this.deathFrameIndex = 0;
         this.intervals = [];
-        this.offset = {
-            top: 120,
-            bottom: 30,
-            left: 40,
-            right: 40,
-        };
-        this.animate();
+    }
+
+    /**
+     * Sets the collision offset for the character.
+     */
+    initOffset() {
+        this.offset = { top: 140, bottom: 10, left: 40, right: 50 };
     }
 
     /**
@@ -116,22 +141,72 @@ class Character extends MovableObject {
     }
 
     /**
-     * Controls the jump animation frames.
+     * Controls the jump animation with preparation phase.
+     * Shows crouch frames before actual jump, then syncs with physics.
      */
     startJumpAnimation() {
         this.intervals.push(
             setInterval(() => {
                 if (this.world && this.world.isPaused) return;
-                if (this.isAboveGround() && this.jumpAnimationIndex < this.IMAGES_JUMPING.length) {
-                    this.setJumpFrame(this.jumpAnimationIndex);
-                    this.jumpAnimationIndex++;
-                } else if (!this.isAboveGround() && this.jumpAnimationIndex > 0
-                ) {
-                    this.setJumpFrame(this.IMAGES_JUMPING.length - 1);
-                    this.jumpAnimationIndex = 0;
-                }
-            }, 80)
+                this.handleJumpAnimation();
+            }, 1000 / 60)
         );
+    }
+
+    /**
+     * Handles all jump animation states.
+     */
+    handleJumpAnimation() {
+        if (this.jumpState === 'airborne') {
+            this.handleAirborneAnimation();
+        } else if (this.jumpState === 'landing') {
+            this.handleLandingAnimation();
+        }
+    }
+
+    /**
+     * Handles animation while character is in the air.
+     * Cycles through all 9 frames smoothly during the jump.
+     */
+    handleAirborneAnimation() {
+        this.jumpFrameCounter++;
+        let frame = this.getJumpFrameFromPhysics();
+        this.setJumpFrame(frame);
+        if (!this.isAboveGround() && this.speedY <= 0) {
+            this.jumpState = 'landing';
+            this.landingFrame = 0;
+        }
+    }
+
+    /**
+     * Maps the current speedY to an animation frame (0-8).
+     * Ensures all frames are shown during the jump arc.
+     * @returns {number} Frame index 0-8
+     */
+    getJumpFrameFromPhysics() {
+        let maxSpeed = 23;
+        if (this.speedY >= maxSpeed * 0.8) return 0;
+        if (this.speedY >= maxSpeed * 0.5) return 1;
+        if (this.speedY >= maxSpeed * 0.2) return 2;
+        if (this.speedY >= 0) return 3;
+        if (this.speedY >= -maxSpeed * 0.2) return 4;
+        if (this.speedY >= -maxSpeed * 0.5) return 5;
+        if (this.speedY >= -maxSpeed * 0.8) return 6;
+        return 7;
+    }
+
+    /**
+     * Handles the landing animation phase.
+     */
+    handleLandingAnimation() {
+        this.landingFrame++;
+        if (this.landingFrame < 3) {
+            this.setJumpFrame(7);
+        } else if (this.landingFrame < 6) {
+            this.setJumpFrame(8);
+        } else {
+            this.jumpState = 'idle';
+        }
     }
 
     /**
@@ -197,12 +272,21 @@ class Character extends MovableObject {
             setInterval(() => {
                 if (this.world && this.world.isPaused) return;
                 if (this.canJump()) {
-                    this.jump();
+                    this.initiateJump();
                     this.updateLastAction();
-                    this.playJumpSound();
                 }
             }, 100)
         );
+    }
+
+    /**
+     * Initiates jump - starts animation at frame 0 and jumps immediately.
+     */
+    initiateJump() {
+        this.jumpState = 'airborne';
+        this.jumpFrameCounter = 0;
+        this.speedY = 23;
+        this.playJumpSound();
     }
 
     /**
@@ -241,7 +325,7 @@ class Character extends MovableObject {
      * @returns {boolean} True if character is walking.
      */
     isWalking() {
-        return (this.world && (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) && !this.isAboveGround() && this.jumpAnimationIndex === 0);
+        return (this.world && (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) && !this.isAboveGround() && this.jumpState === 'idle');
     }
 
     /**
@@ -256,7 +340,7 @@ class Character extends MovableObject {
             !this.world.keyboard.RIGHT &&
             !this.world.keyboard.LEFT &&
             !this.isAboveGround() &&
-            this.jumpAnimationIndex === 0
+            this.jumpState === 'idle'
         );
     }
 
@@ -273,7 +357,7 @@ class Character extends MovableObject {
      * @returns {boolean} True if jump is possible.
      */
     canJump() {
-        return this.world && this.world.keyboard.SPACE && !this.isAboveGround();
+        return this.world && this.world.keyboard.SPACE && !this.isAboveGround() && (this.jumpState === 'idle' || this.jumpState === 'landing');
     }
 
     /**
