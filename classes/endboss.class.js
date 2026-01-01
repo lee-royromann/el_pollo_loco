@@ -45,13 +45,16 @@ class Endboss extends MovableObject {
     ];
 
     isDead = false;
-    energy = 5;
+    energy = 8;
+    maxEnergy = 8;
     lastHit = 0;
     deathAnimationPlayed = false;
     isActive = false;
     isPlayingAlert = false;
     isAttacking = false;
     lastAttackTime = 0;
+    chaseSpeed = 3;
+    maxChaseSpeed = 6;
     world = null;
 
     /**
@@ -59,24 +62,40 @@ class Endboss extends MovableObject {
      */
     constructor() {
         super().loadImage(this.IMAGES_ALERT[0]);
+        this.loadAllImages();
+        this.initPosition();
+        this.initOffset();
+        this.animate();
+        this.checkForActivation();
+    }
+
+    /**
+     * Loads all endboss animation images.
+     */
+    loadAllImages() {
         this.loadImages(this.IMAGES_WALKING);
         this.loadImages(this.IMAGES_ALERT);
         this.loadImages(this.IMAGES_ATTACK);
         this.loadImages(this.IMAGES_HURT);
         this.loadImages(this.IMAGES_DEAD);
+    }
+
+    /**
+     * Sets the endboss initial position and size.
+     */
+    initPosition() {
         this.x = 5000;
         this.y = 60;
         this.height = 400;
         this.width = 280;
-        this.speed = 2;
-        this.offset = {
-            top: 50,
-            bottom: 20,
-            left: 30,
-            right: 30,
-        };
-        this.animate();
-        this.checkForActivation();
+        this.speed = 3;
+    }
+
+    /**
+     * Sets the collision offset for the endboss.
+     */
+    initOffset() {
+        this.offset = { top: 50, bottom: 20, left: 30, right: 30 };
     }
 
     /**
@@ -123,11 +142,11 @@ class Endboss extends MovableObject {
                 
                 if (this.isAttacking) {
                     this.moveTowardsPlayer(distance);
-                } else if (absDistance < 250 && this.canAttack()) {
+                } else if (absDistance < 350 && this.canAttack()) {
                     this.turnToPlayerAndAttack(distance);
-                } else if (absDistance < 250 && !this.canAttack()) {
+                } else if (absDistance < 350 && !this.canAttack()) {
                     this.backAwayFromPlayer(distance);
-                } else if (absDistance >= 250) {
+                } else if (absDistance >= 350) {
                     this.moveTowardsPlayer(distance);
                 }
             }
@@ -140,7 +159,7 @@ class Endboss extends MovableObject {
      */
     canAttack() {
         let currentTime = new Date().getTime();
-        return currentTime - this.lastAttackTime > 3000;
+        return currentTime - this.lastAttackTime > 2000;
     }
 
     /**
@@ -247,19 +266,23 @@ class Endboss extends MovableObject {
     startBossFight() {
         this.isPlayingAlert = false;
         this.isActive = true;
+        if (this.world?.statusBarEndboss) {
+            this.world.statusBarEndboss.visible = true;
+        }
         this.startMovement();
     }
 
     /**
-     * Moves the boss towards the player.
+     * Moves the boss towards the player with acceleration.
      * @param {number} distance - Distance to player (positive = player is left).
      */
     moveTowardsPlayer(distance) {
+        this.chaseSpeed = Math.min(this.chaseSpeed + 0.02, this.maxChaseSpeed);
         if (distance > 20) {
-            this.x -= 4;
+            this.x -= this.chaseSpeed;
             this.otherDirection = false;
         } else if (distance < -20) {
-            this.x += 4;
+            this.x += this.chaseSpeed;
             this.otherDirection = true;
         }
     }
