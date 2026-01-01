@@ -18,23 +18,31 @@ class SmallChicken extends MovableObject {
      * @param {number} [x] - X position, random if not provided.
      */
     constructor(x) {
-        super().loadImage(
-            "./img/3_enemies_chicken/chicken_small/1_walk/1_w.png"
-        );
+        super().loadImage("./img/3_enemies_chicken/chicken_small/1_walk/1_w.png");
         this.loadImages(this.IMAGES_WALKING);
         this.loadImages(this.IMAGES_DEAD);
+        this.initPosition(x);
+        this.initOffset();
+        this.animate();
+    }
+
+    /**
+     * Sets the chicken's position and size.
+     * @param {number} [x] - X position, random if not provided.
+     */
+    initPosition(x) {
         this.x = x !== undefined ? x : 400 + Math.random() * 3200;
         this.y = 380;
         this.height = 45;
         this.width = 55;
         this.speed = 0.1 + Math.random() * 0.3;
-        this.offset = {
-            top: 5,
-            bottom: 5,
-            left: 5,
-            right: 10,
-        };
-        this.animate();
+    }
+
+    /**
+     * Sets the collision offset.
+     */
+    initOffset() {
+        this.offset = { top: 5, bottom: 5, left: 5, right: 10 };
     }
 
     /**
