@@ -16,17 +16,29 @@ class Bottle extends MovableObject {
     constructor(x, y) {
         super().loadImage("./img/6_salsa_bottle/1_salsa_bottle_on_ground.png");
         this.loadImages(this.IMAGES_BOTTLE);
+        this.initPosition(x, y);
+        this.initOffset();
+        this.animate();
+    }
+
+    /**
+     * Sets the bottle's position and size.
+     * @param {number} x - X position.
+     * @param {number} y - Y position.
+     */
+    initPosition(x, y) {
         this.x = x;
         this.y = y;
         this.width = 80;
         this.height = 80;
-        this.offset = {
-            top: 10,
-            bottom: 10,
-            left: 20,
-            right: 20,
-        };
-        this.animate();
+    }
+
+    /**
+     * Sets the collision offset.
+     * Large horizontal offsets prevent "shadow collecting" before visual contact.
+     */
+    initOffset() {
+        this.offset = { top: 20, bottom: 15, left: 35, right: 35 };
     }
 
     /**
