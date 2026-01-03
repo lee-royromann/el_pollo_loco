@@ -389,8 +389,8 @@ function initTouchControls() {
 function setupTouchButton(id, key) {
     const btn = document.getElementById(id);
     if (!btn) return;
-    btn.addEventListener("touchstart", (e) => { e.preventDefault(); keyboard[key] = true; });
-    btn.addEventListener("touchend", (e) => { e.preventDefault(); keyboard[key] = false; });
+    btn.addEventListener("touchstart", (e) => { e.preventDefault(); keyboard[key] = true; }, { passive: false });
+    btn.addEventListener("touchend", (e) => { e.preventDefault(); keyboard[key] = false; }, { passive: false });
     btn.addEventListener("contextmenu", (e) => e.preventDefault());
 }
 
