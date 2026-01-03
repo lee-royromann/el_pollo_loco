@@ -111,12 +111,14 @@ class World {
     }
 
     /**
-     * Sets world reference on character and endboss.
+     * Sets world reference on character, endboss, coins, and bottles.
      */
     setWorld() {
         this.character.world = this;
         let endboss = this.level.enemies.find((enemy) => enemy.constructor.name == "Endboss");
         if (endboss) endboss.world = this;
+        this.level.coins.forEach((coin) => (coin.world = this));
+        this.level.bottles.forEach((bottle) => (bottle.world = this));
     }
 
     /**

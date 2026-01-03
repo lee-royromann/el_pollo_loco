@@ -93,17 +93,13 @@ function initStartButtons() {
 }
 
 /**
- * Initializes modal close button and backdrop handlers.
+ * Initializes modal close button handlers.
+ * Modals can only be closed via the close button.
  */
 function initModalCloseHandlers() {
     document.querySelectorAll(".modal-close").forEach((closeBtn) => {
         closeBtn.addEventListener("click", (e) => {
             e.target.closest(".modal").classList.remove("active");
-        });
-    });
-    document.querySelectorAll(".modal").forEach((modal) => {
-        modal.addEventListener("click", (e) => {
-            if (e.target === modal) modal.classList.remove("active");
         });
     });
 }

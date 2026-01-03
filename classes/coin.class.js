@@ -44,6 +44,7 @@ class Coin extends MovableObject {
      */
     animate() {
         setInterval(() => {
+            if (this.world && this.world.isPaused) return;
             this.rotationAngle += 3;
             if (this.rotationAngle >= 360) this.rotationAngle = 0;
         }, 1000 / 60);

@@ -15,6 +15,7 @@ class MovableObject extends DrawableObject {
     };
     energy = 100;
     lastHit = 0;
+    groundY = 120;
 
     /**
      * Applies gravity to the object, making it fall.
@@ -24,8 +25,12 @@ class MovableObject extends DrawableObject {
             if (this.isAboveGround() || this.speedY > 0) {
                 this.y -= this.speedY;
                 this.speedY -= this.acceleration;
+                if (this.y > this.groundY && this.speedY < 0) {
+                    this.y = this.groundY;
+                    this.speedY = 0;
+                }
             } else {
-                this.y = 120;
+                this.y = this.groundY;
                 this.speedY = 0;
             }
         }, 1000 / 60);
